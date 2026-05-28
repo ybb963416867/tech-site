@@ -1,8 +1,8 @@
 export const SITE = {
   title: 'Kernel Notes',
   description: 'A minimal technical blog for engineering notes, systems thinking, and build logs.',
-  url: import.meta.env.SITE_URL || 'https://example.com',
-  author: 'Your Name',
+  url: import.meta.env.SITE_URL || 'https://yangxiandroid.ccwu.cc/',
+  author: 'yangxi',
   locale: 'zh-CN',
   giscus: {
     repo: 'OWNER/REPO',

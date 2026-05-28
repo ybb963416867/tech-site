@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import Search from '../components/Search.astro';
+import { getPosts } from '../lib/posts';
+import { SITE } from '../site.config';
+
+const posts = await getPosts();
+const featuredPosts = posts.slice(0, 6);
+---
+
+<BaseLayout title="首页" description={SITE.description}>
+  <section class="shell hero">
+    <div>
+      <p class="eyebrow">Markdown / Search / Deploy</p>
+      <h1>把工程笔记写成可检索的静态知识库。</h1>
+      <p>{SITE.description}</p>
+    </div>
+    <aside class="signal">
+      <p>Astro content collections</p>
+      <p>Pagefind static index</p>
+      <p>RSS + sitemap + robots</p>
+      <p>Cloudflare Pages ready</p>
+    </aside>
+  </section>
+
+  <section class="shell" aria-label="Search">
+    <Search />
+  </section>
+
+  <section class="shell post-list" aria-label="Latest posts">
+    {featuredPosts.map((post) => <PostCard post={post} />)}
+  </section>
+</BaseLayout>

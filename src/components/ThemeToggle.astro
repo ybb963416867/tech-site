@@ -1,0 +1,35 @@
+---
+import { Moon, Sun } from '@lucide/astro';
+---
+
+<button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+  <Sun class="sun" size={18} />
+  <Moon class="moon" size={18} />
+</button>
+
+<script is:inline>
+  const root = document.documentElement;
+  const button = document.querySelector('#theme-toggle');
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initial = stored || (prefersDark ? 'dark' : 'light');
+
+  root.classList.toggle('dark', initial === 'dark');
+
+  button?.addEventListener('click', () => {
+    const next = root.classList.contains('dark') ? 'light' : 'dark';
+    root.classList.toggle('dark', next === 'dark');
+    localStorage.setItem('theme', next);
+  });
+</script>
+
+<style>
+  :global(.dark) .sun,
+  .moon {
+    display: none;
+  }
+
+  :global(.dark) .moon {
+    display: block;
+  }
+</style>

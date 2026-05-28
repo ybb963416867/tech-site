@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTags } from '../../lib/posts';
+
+const tags = await getTags();
+---
+
+<BaseLayout title="标签" description="按标签浏览文章。">
+  <section class="shell hero">
+    <div>
+      <p class="eyebrow">Taxonomy</p>
+      <h1>标签</h1>
+      <p>把分散的工程笔记按主题串起来。</p>
+    </div>
+  </section>
+  <section class="shell tag-cloud">
+    {tags.map(([tag, count]) => <a href={`/tags/${encodeURIComponent(tag)}/`}>#{tag} · {count}</a>)}
+  </section>
+</BaseLayout>

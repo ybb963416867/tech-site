@@ -1,0 +1,27 @@
+---
+import { SITE } from '../site.config';
+---
+
+{
+  SITE.giscus.repoId.startsWith('REPLACE') ? (
+    <p class="meta">Giscus 未启用：请在 <code>src/site.config.ts</code> 中配置 repoId 与 categoryId。</p>
+  ) : (
+    <script
+      is:inline
+      src="https://giscus.app/client.js"
+      data-repo={SITE.giscus.repo}
+      data-repo-id={SITE.giscus.repoId}
+      data-category={SITE.giscus.category}
+      data-category-id={SITE.giscus.categoryId}
+      data-mapping={SITE.giscus.mapping}
+      data-strict="0"
+      data-reactions-enabled={SITE.giscus.reactionsEnabled}
+      data-emit-metadata={SITE.giscus.emitMetadata}
+      data-input-position={SITE.giscus.inputPosition}
+      data-theme="preferred_color_scheme"
+      data-lang={SITE.giscus.lang}
+      crossorigin="anonymous"
+      async
+    />
+  )
+}

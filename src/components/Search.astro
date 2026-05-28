@@ -1,0 +1,31 @@
+<div class="search-panel">
+  <div id="search"></div>
+</div>
+
+<script>
+  import '@pagefind/default-ui/css/ui.css';
+  import { PagefindUI } from '@pagefind/default-ui';
+
+  window.addEventListener('DOMContentLoaded', () => {
+    new PagefindUI({
+      element: '#search',
+      showSubResults: true,
+      showImages: false,
+      translations: {
+        placeholder: '搜索文章、标签、代码片段'
+      }
+    });
+  });
+</script>
+
+<style is:global>
+  .pagefind-ui {
+    --pagefind-ui-primary: var(--text);
+    --pagefind-ui-text: var(--text);
+    --pagefind-ui-background: var(--surface);
+    --pagefind-ui-border: var(--line);
+    --pagefind-ui-tag: var(--bg);
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-font: var(--font-body);
+  }
+</style>

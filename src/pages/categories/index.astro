@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategories } from '../../lib/posts';
+
+const categories = await getCategories();
+---
+
+<BaseLayout title="专栏" description="按专栏浏览文章。">
+  <section class="shell hero">
+    <div>
+      <p class="eyebrow">Columns</p>
+      <h1>专栏</h1>
+      <p>把同一方向的文章收进一个长期维护的主题里。</p>
+    </div>
+  </section>
+  <section class="shell tag-cloud">
+    {categories.map(([category, count]) => <a href={`/categories/${encodeURIComponent(category)}/`}>{category} · {count}</a>)}
+  </section>
+</BaseLayout>

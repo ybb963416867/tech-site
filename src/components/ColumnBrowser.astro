@@ -50,6 +50,16 @@ function makeHref(slugs: string[]) {
   return `/categories/${slugs.map((slug) => encodeURIComponent(slug)).join('/')}/`;
 }
 
+function makeMobilePostHref(post: CollectionEntry<'blog'>) {
+  const params = new URLSearchParams({
+    from: 'mobile-category',
+    back: activeSlugs.length > 0 ? makeHref(activeSlugs) : '/categories/',
+    title: mobileTitle
+  });
+
+  return `/blog/${post.slug}/?${params.toString()}`;
+}
+
 function isOpen(slugs: string[]) {
   if (!activeKey) return false;
   const key = slugs.join('/');
@@ -100,7 +110,105 @@ function flattenColumns(items: Column[], parentSlugs: string[] = [], depth = 0) 
 const treeRows = flattenColumns(columns);
 const totalColumns = columns.length;
 const totalPosts = allPosts.length;
+
+function findColumn(items: Column[], slugs: string[]): Column | undefined {
+  if (slugs.length === 0) return undefined;
+  let currentItems = items;
+  let current: Column | undefined;
+
+  for (const slug of slugs) {
+    current = currentItems.find((item) => item.slug === slug);
+    if (!current) return undefined;
+    currentItems = current.children;
+  }
+
+  return current;
+}
+
+function latestDateForPrefix(slugs: string[]) {
+  const dates = allPosts
+    .filter((post) => {
+      const postSlugs = getPostColumnSlugs(post);
+      return slugs.every((slug, index) => postSlugs[index] === slug);
+    })
+    .map((post) => post.data.pubDate.valueOf());
+
+  if (dates.length === 0) return '';
+
+  return new Date(Math.max(...dates)).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+}
+
+const activeColumn = findColumn(columns, activeSlugs);
+const mobileTitle = activeSlugs.length > 0 ? activeSlugs[activeSlugs.length - 1] : '全部笔记';
+const mobileFolders = activeColumn ? activeColumn.children : columns;
+const mobilePosts = postGroups.get(activeKey) || [];
+const parentHref =
+  activeSlugs.length > 1
+    ? makeHref(activeSlugs.slice(0, -1))
+    : activeSlugs.length === 1
+      ? '/categories/'
+      : '/';
 ---
+
+<section class="mobile-file-browser" aria-label={`${mobileTitle} 文件列表`}>
+  <header class="mobile-file-header">
+    <a class="mobile-file-icon-button" href={parentHref} aria-label="返回上一级">
+      <span class="mobile-back-icon" aria-hidden="true"></span>
+    </a>
+    <h1>{mobileTitle}</h1>
+    <a class="mobile-file-icon-button" href="/blog/" aria-label="文章归档">
+      <span class="mobile-more-icon" aria-hidden="true"></span>
+    </a>
+  </header>
+
+  <div class="mobile-file-rule" aria-hidden="true"></div>
+
+  <div class="mobile-file-list">
+    {
+      mobileFolders.map((folder) => {
+        const slugs = [...activeSlugs, folder.slug];
+        return (
+          <a class="mobile-file-card folder" href={makeHref(slugs)}>
+            <span class="mobile-folder-icon" aria-hidden="true"></span>
+            <span class="mobile-file-content">
+              <strong>{folder.name}</strong>
+              <span>{latestDateForPrefix(slugs) || `${folder.count} 篇笔记`}</span>
+            </span>
+          </a>
+        );
+      })
+    }
+
+    {mobileFolders.length > 0 && mobilePosts.length > 0 && <p class="mobile-file-section">笔记</p>}
+
+    {
+      mobilePosts.map((post) => {
+        const date = post.data.pubDate.toLocaleDateString('zh-CN', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
+
+        return (
+          <a class="mobile-file-card note" href={makeMobilePostHref(post)}>
+            <span class="mobile-note-icon" aria-hidden="true">M</span>
+            <span class="mobile-file-content">
+              <strong>{post.data.title}</strong>
+              <span class="mobile-file-desc">{post.data.description}</span>
+              <span>{date}</span>
+            </span>
+          </a>
+        );
+      })
+    }
+
+    {mobileFolders.length === 0 && mobilePosts.length === 0 && <p class="mobile-file-empty">这个目录暂时没有笔记。</p>}
+  </div>
+</section>
 
 <section class="knowledge-shell">
   <aside class="knowledge-sidebar" aria-label="专栏目录">

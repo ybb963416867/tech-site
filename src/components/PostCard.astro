@@ -13,9 +13,16 @@ const date = post.data.pubDate.toLocaleDateString('zh-CN', {
   month: '2-digit',
   day: '2-digit'
 });
+const searchText = [
+  post.data.title,
+  post.data.description,
+  column,
+  post.slug,
+  ...post.data.tags
+].join(' ');
 ---
 
-<a class="post-card" href={`/blog/${post.slug}/`}>
+<a class="post-card" href={`/blog/${post.slug}/`} data-post-card data-search-text={searchText}>
   <time class="post-date" datetime={post.data.pubDate.toISOString()}>{date}</time>
   <div>
     <h2>{post.data.title}</h2>

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ColumnBrowser from '../../components/ColumnBrowser.astro';
+import { getColumnPaths, getColumns, getPostColumnSlugs, getPosts } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const columns = await getColumnPaths();
+  return columns.map((column) => ({
+    params: { column: column.slugs.join('/') },
+    props: { column }
+  }));
+}
+
+interface Props {
+  column: Awaited<ReturnType<typeof getColumnPaths>>[number];
+}
+
+const { column } = Astro.props;
+const allPosts = await getPosts();
+const columns = await getColumns();
+const posts = allPosts.filter((post) => {
+  const slugs = getPostColumnSlugs(post);
+  return column.slugs.every((slug, index) => slugs[index] === slug);
+});
+const title = column.names.join(' / ');
+---
+
+<BaseLayout title={title} description={`${title} 专栏下的文章。`}>
+  <ColumnBrowser
+    activeSlugs={column.slugs}
+    allPosts={allPosts}
+    columns={columns}
+    posts={posts}
+    title={title}
+    subtitle={`${posts.length} 篇文章`}
+  />
+</BaseLayout>

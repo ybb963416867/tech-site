@@ -1,5 +1,5 @@
 export const SITE = {
-  title: 'Kernel Notes',
+  title: 'Notes',
   description: 'A minimal technical blog for engineering notes, systems thinking, and build logs.',
   url: import.meta.env.SITE_URL || 'https://yangxiandroid.ccwu.cc/',
   author: 'yangxi',

@@ -1,0 +1,231 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { Column } from '../lib/posts';
+import { getPostColumnNames, getPostColumnSlugs } from '../lib/posts';
+
+interface Props {
+  activeSlugs?: string[];
+  allPosts: CollectionEntry<'blog'>[];
+  columns: Column[];
+  posts: CollectionEntry<'blog'>[];
+  subtitle: string;
+  title: string;
+}
+
+type TreeRow =
+  | {
+      type: 'folder';
+      name: string;
+      href: string;
+      depth: number;
+      count: number;
+      active: boolean;
+      open: boolean;
+      key: string;
+      parentKey: string;
+      hasChildren: boolean;
+    }
+  | {
+      type: 'post';
+      name: string;
+      href: string;
+      depth: number;
+      active: boolean;
+      key: string;
+      parentKey: string;
+    };
+
+const { activeSlugs = [], allPosts, columns, posts, subtitle, title } = Astro.props;
+const activeKey = activeSlugs.join('/');
+const postGroups = new Map<string, CollectionEntry<'blog'>[]>();
+
+for (const post of allPosts) {
+  const key = getPostColumnSlugs(post).join('/');
+  const group = postGroups.get(key) || [];
+  group.push(post);
+  postGroups.set(key, group);
+}
+
+function makeHref(slugs: string[]) {
+  return `/categories/${slugs.map((slug) => encodeURIComponent(slug)).join('/')}/`;
+}
+
+function isOpen(slugs: string[]) {
+  if (!activeKey) return false;
+  const key = slugs.join('/');
+  return activeKey === key || activeKey.startsWith(`${key}/`);
+}
+
+function flattenColumns(items: Column[], parentSlugs: string[] = [], depth = 0) {
+  const rows: TreeRow[] = [];
+  const parentKey = parentSlugs.join('/');
+
+  for (const item of items) {
+    const slugs = [...parentSlugs, item.slug];
+    const key = slugs.join('/');
+    const open = isOpen(slugs);
+    const directPosts = postGroups.get(key) || [];
+
+    rows.push({
+      type: 'folder',
+      name: item.name,
+      href: makeHref(slugs),
+      depth,
+      count: item.count,
+      active: activeKey === key,
+      open,
+      key,
+      parentKey,
+      hasChildren: item.children.length > 0 || directPosts.length > 0
+    });
+
+    rows.push(...flattenColumns(item.children, slugs, depth + 1));
+
+    for (const post of directPosts) {
+      rows.push({
+        type: 'post',
+        name: post.data.title,
+        href: `/blog/${post.slug}/`,
+        depth: depth + 1,
+        active: false,
+        key: `${key}::${post.id}`,
+        parentKey: key
+      });
+    }
+  }
+
+  return rows;
+}
+
+const treeRows = flattenColumns(columns);
+const totalColumns = columns.length;
+const totalPosts = allPosts.length;
+---
+
+<section class="knowledge-shell">
+  <aside class="knowledge-sidebar" aria-label="专栏目录">
+    <div class="sidebar-head">
+      <a href="/categories/">全部笔记</a>
+      <span>{totalPosts}</span>
+    </div>
+    <nav class="column-tree">
+      {
+        treeRows.map((row) =>
+          row.type === 'folder' ? (
+            <div
+              class:list={['tree-row', 'tree-folder-row', { active: row.active }]}
+              style={`--depth: ${row.depth}`}
+              data-tree-row
+              data-key={row.key}
+              data-parent={row.parentKey}
+              data-open={row.open ? 'true' : 'false'}
+            >
+              <button
+                class="tree-toggle"
+                type="button"
+                aria-label={`${row.open ? '收起' : '展开'} ${row.name}`}
+                aria-expanded={row.open ? 'true' : 'false'}
+                disabled={!row.hasChildren}
+              >
+                <span class:list={['tree-caret', { open: row.open }]} aria-hidden="true"></span>
+              </button>
+              <a class="tree-folder-link" href={row.href}>
+                <span class="tree-folder-icon" aria-hidden="true"></span>
+                <span class="tree-name">{row.name}</span>
+                <span class="tree-count">{row.count}</span>
+              </a>
+            </div>
+          ) : (
+            <a
+              class="tree-row tree-post"
+              href={row.href}
+              style={`--depth: ${row.depth}`}
+              data-tree-row
+              data-key={row.key}
+              data-parent={row.parentKey}
+            >
+              <span class="tree-doc-icon" aria-hidden="true"></span>
+              <span class="tree-name">{row.name}</span>
+            </a>
+          )
+        )
+      }
+    </nav>
+  </aside>
+
+  <section class="knowledge-main">
+    <header class="knowledge-toolbar">
+      <div>
+        <p class="eyebrow">Columns / {totalColumns}</p>
+        <h1>{title}</h1>
+        <p>{subtitle}</p>
+      </div>
+      <a class="toolbar-action" href="/blog/">文章归档</a>
+    </header>
+
+    <div class="note-grid" aria-label={`${title} 文章列表`}>
+      {
+        posts.map((post) => {
+          const column = getPostColumnNames(post).join(' / ');
+          const date = post.data.pubDate.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+          });
+
+          return (
+            <a class="note-card" href={`/blog/${post.slug}/`}>
+              <span class="note-column">{column}</span>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+              <span class="note-date">{date}</span>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+</section>
+
+<script>
+  const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-tree-row]'));
+  const rowByKey = new Map(rows.map((row) => [row.dataset.key || '', row]));
+
+  function isVisible(row: HTMLElement) {
+    let parentKey = row.dataset.parent || '';
+
+    while (parentKey) {
+      const parent = rowByKey.get(parentKey);
+      if (!parent || parent.dataset.open !== 'true') return false;
+      parentKey = parent.dataset.parent || '';
+    }
+
+    return true;
+  }
+
+  function syncTree() {
+    for (const row of rows) {
+      row.hidden = !isVisible(row);
+      const button = row.querySelector<HTMLButtonElement>('.tree-toggle');
+      const caret = row.querySelector<HTMLElement>('.tree-caret');
+
+      if (button && caret) {
+        const open = row.dataset.open === 'true';
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        button.setAttribute('aria-label', `${open ? '收起' : '展开'} ${row.querySelector('.tree-name')?.textContent || ''}`);
+        caret.classList.toggle('open', open);
+      }
+    }
+  }
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>('.tree-toggle')) {
+    button.addEventListener('click', () => {
+      const row = button.closest<HTMLElement>('[data-tree-row]');
+      if (!row) return;
+      row.dataset.open = row.dataset.open === 'true' ? 'false' : 'true';
+      syncTree();
+    });
+  }
+
+  syncTree();
+</script>

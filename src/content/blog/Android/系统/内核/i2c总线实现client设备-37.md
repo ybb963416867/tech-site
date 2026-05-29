@@ -1,0 +1,194 @@
+---
+title: "i2c总线实现client设备-37"
+description: "i2c总线实现client设备-37 的技术笔记。"
+pubDate: 2026-05-29
+category: "内核"
+tags: [iOS, API]
+draft: false
+---
+# i2c总线实现client设备
+
+# Linux l2C 驱动框架简介
+
+- Linux中的I2C也是按照平台总线模型设计的，既然也是按照平台总线模型设计的，是不是也分为一个device和一个driver呢?但是I2C这里的 device
+  在讲 platform 的时候就说过, platform是虚拟出来的一条总线;目的是为了实现总线、设备、驱动框架。
+- 对于I2C而言，不需要虚拟出一条总线，直接使用I2C总线即可。
+- 同样，我们也是先从非设备树开始，先来看一下，在没有设备树之前我们是怎么实现的i2C的device 部分，也就是client部分。然后在学习有了设备树之后，我们的client是怎么编写的。按照Linux的发展路径来学习。
+  在没有使用设备树之前，我们使用的是 i2c_board_info这个结构体来描述一个I2C设备的，i2c_board_info这个结构体如下:
+
+```
+struct i2c_board_info{
+        char type[12C_NAME_SIZE]; /* I2C设备名字*/
+        unsigned short flags;/*标志*/
+        unsigned short addr /* 12C 器件地址*/
+        void *platform_data;
+        struct dev archdata *archdata;
+        struct device_node *of_node;
+        struct fwnode_handle *fwnode;
+        int irq;
+}
+```
+
+在这个结构体里面，type和addr 这两个成员变量是必须要设置的，一个是 i2C设备的名字，这个名字就是用来进行匹配用的，一个是I2C设备的器件地址。也可以使用宏:
+
+```
+#define I2C_BOARD_INFO(dev type, dev addr) 
+.type = dev_type,.addr = (dev addr)
+```
+
+可以看出，I2C_BOARD_INFO宏其实就是设置 i2c_board_info的 type和addr这两个成员变量。
+
+------
+
+i2C设备和驱动的匹配过程是由I2C核心来完成的，在Linux源码的drivers/i2c/i2c-core.c 就是 I2C的核心部分，I2C核心提供了一些与具体硬件无关的 API函数，如下:
+
+- i2c_get_adapter函数
+
+**作用:**
+
+获得一个I2C适配器
+
+**原型:**
+
+```
+struct i2c_adapter *i2c_get_adapter(int nr);
+```
+
+**参数:**
+
+-  要获得的哪个I2C适配器的编号
+- 返回值:失败返回NULL。
+
+------
+
+- i2c_put_adapter函数作用:释放I2C适配器
+
+**原型:**
+
+```
+void i2cput_adapter(struct i2c_adapter *adap);
+```
+
+**参数:**
+
+- 要释放的I2C适配器
+- 返回值:失败返回NULL
+
+- i2c_new_device函数
+
+**作用:**
+
+把I2C适配器和2C器件关联起来。
+
+**原型:**
+
+```
+i2c_new_device(struct i2c_adapter *adap, struct i2c_board_info const *info);
+```
+
+参数:
+
+- struct i2c_adapter *adap: I2C适配器
+- struct  i2c_board_info const  *info: i2c_board_info的指针
+- 返回值:失败返回NULL;
+
+------
+
+- i2c_unregister_device函数
+
+**作用:**
+
+注销一个client。
+
+**原型:**
+
+```
+void i2c_unregister_device(struct i2c_client *client)
+```
+
+**参数:**
+
+-  i2c_client的指针。
+- 返回值:失败返回NULL
+
+------
+
+在使用了设备树以后，就不用这么复杂了，使用设备树的时候只要在对应的I2C节点下创建相应设备的节点即可，比如我想添加一个触摸芯片FT5X06的设备，我就可以在对应的I2C的节点下这样写，如下图所示:
+注意:迅为10.1寸屏幕的触摸芯片是gt911，4.3寸触摸芯片是 tsc2007。其它都是
+
+```
+ft5426&i2c2{
+    clock_frequency = <100000>;
+    pinctrl-names = "default";
+    pinctrl-0=<&pinctrl_i2c2>;
+    status = "okay";
+    edt-ft5x06@38{
+        compatible ="edt,edt-ft5306", "edt, edt-ft5x06","edt,edt-ft5406";
+        pinctrl-names = "default";
+        pinctrl-0 =<&ts_int pin
+        &ts reset_pin>;
+        reg =<0x38>;
+        interrupt-parent = <&gpio1>;
+        interrupts = <90>;
+        reset-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
+        irq-gpios =<&gpio1 9 GPIO_ACTIVE_LOW>;
+        status = "okay";
+    };
+};
+```
+
+**通过make menuconfig  卸载系统驱动FT5X0X**
+
+> device-drivers   >>  input  device support  >>  Touchscreens  >> FT5X0X          
+
+**设置屏幕大小**
+
+> setenv  lcdtype 1024*600      >>>    saveenv   >>> reset
+
+
+**代码**
+
+- client.c
+
+```
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/i2c.h>
+
+//分配一个i2c_适配器指针
+struct i2c_adapter *i2c_ada;
+
+//分配一个i2c_client
+struct i2c_client *i2c_client;
+
+//支持i2c的设备列表
+struct i2c_board_info ft5x06_info[] = {
+
+    //每一项都代表一个i2c设备，这句话的意思是说这个设备的名字是ft5x06_test, 器件是0x38
+    {I2C_BOARD_INFO("ft5x06", 0x38)},
+
+};
+
+static int ft5x06_client_init(void){
+
+    printk("ft5x06_client_init \n");
+    //调用i2c_get_adapter ，获取一个i2c总线，因为ft5x06 是挂载到了i2c-2上，所以这个参数是1所以这句话的意思是把这个芯片挂载到了i2c2上
+    i2c_ada = i2c_get_adapter(1);
+    //把i2c_client 和 I2C 器件关联起来
+    i2c_client = i2c_new_device(i2c_ada, ft5x06_info);
+    i2c_put_adapter(i2c_ada);
+    return 0;
+}
+
+static void ft5x06_client_exit(void){
+
+    i2c_unregister_device(i2c_client);
+  
+    printk("ft5x06_client_exit \n");
+
+}
+
+module_init(ft5x06_client_init);
+module_exit(ft5x06_client_exit);
+MODULE_LICENSE("GPL");
+```

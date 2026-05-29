@@ -1,19 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCategories } from '../../lib/posts';
+import ColumnBrowser from '../../components/ColumnBrowser.astro';
+import { getColumns, getPosts } from '../../lib/posts';
 
-const categories = await getCategories();
+const columns = await getColumns();
+const posts = await getPosts();
 ---
 
 <BaseLayout title="专栏" description="按专栏浏览文章。">
-  <section class="shell hero">
-    <div>
-      <p class="eyebrow">Columns</p>
-      <h1>专栏</h1>
-      <p>把同一方向的文章收进一个长期维护的主题里。</p>
-    </div>
-  </section>
-  <section class="shell tag-cloud">
-    {categories.map(([category, count]) => <a href={`/categories/${encodeURIComponent(category)}/`}>{category} · {count}</a>)}
-  </section>
+  <ColumnBrowser
+    allPosts={posts}
+    columns={columns}
+    posts={posts}
+    title="全部笔记"
+    subtitle="按 blog 目录组织的知识库视图。"
+  />
 </BaseLayout>

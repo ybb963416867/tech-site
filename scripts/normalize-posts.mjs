@@ -1,7 +1,9 @@
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname, join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const BLOG_DIR = new URL('../src/content/blog/', import.meta.url);
+const BLOG_DIR_PATH = fileURLToPath(BLOG_DIR);
 const today = new Date().toISOString().slice(0, 10);
 
 const KNOWN_TAGS = [
@@ -77,7 +79,7 @@ function inferTags(content) {
 }
 
 function inferCategory(filePath, tags) {
-  const relativePath = relative(BLOG_DIR.pathname, filePath);
+  const relativePath = relative(BLOG_DIR_PATH, filePath);
   const parent = basename(dirname(relativePath));
 
   if (parent && parent !== '.' && parent !== 'blog') {
@@ -96,14 +98,14 @@ function escapeYaml(value) {
   return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
-async function listMarkdownFiles(dirUrl) {
-  const entries = await readdir(dirUrl, { withFileTypes: true });
+async function listMarkdownFiles(dirPath) {
+  const entries = await readdir(dirPath, { withFileTypes: true });
   const files = [];
 
   for (const entry of entries) {
-    const entryPath = join(dirUrl.pathname, entry.name);
+    const entryPath = join(dirPath, entry.name);
     if (entry.isDirectory()) {
-      files.push(...(await listMarkdownFiles(new URL(`${entry.name}/`, dirUrl))));
+      files.push(...(await listMarkdownFiles(entryPath)));
     } else if (entry.isFile() && entry.name.endsWith('.md')) {
       files.push({ name: entry.name, path: entryPath });
     }
@@ -113,7 +115,7 @@ async function listMarkdownFiles(dirUrl) {
 }
 
 let converted = 0;
-const files = await listMarkdownFiles(BLOG_DIR);
+const files = await listMarkdownFiles(BLOG_DIR_PATH);
 
 for (const file of files) {
   const raw = await readFile(file.path, 'utf8');

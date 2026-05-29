@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS Swift 知识体系脑图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at center, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .mind-map {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .central-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+            z-index: 100;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .central-node:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+        }
+        
+        .central-text {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .branch {
+            position: absolute;
+            transform-origin: center;
+        }
+        
+        .branch-line {
+            position: absolute;
+            background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
+            height: 3px;
+            border-radius: 2px;
+        }
+        
+        .main-node {
+            position: absolute;
+            width: 140px;
+            height: 70px;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 50;
+        }
+        
+        .main-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .sub-node {
+            position: absolute;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            z-index: 25;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        
+        .sub-node:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .sub-line {
+            position: absolute;
+            background: rgba(255,255,255,0.4);
+            height: 2px;
+            border-radius: 1px;
+            opacity: 0;
+            z-index: 10;
+        }
+        
+        /* 主分支颜色 */
+        .branch-1 .main-node { background: linear-gradient(135deg, #FF6B35, #F7931E); }
+        .branch-2 .main-node { background: linear-gradient(135deg, #007AFF, #5856D6); }
+        .branch-3 .main-node { background: linear-gradient(135deg, #34C759, #30D158); }
+        .branch-4 .main-node { background: linear-gradient(135deg, #FF9500, #FF8800); }
+        .branch-5 .main-node { background: linear-gradient(135deg, #5856D6, #AF52DE); }
+        .branch-6 .main-node { background: linear-gradient(135deg, #AF52DE, #FF2D92); }
+        .branch-7 .main-node { background: linear-gradient(135deg, #FF3B30, #FF6B6B); }
+        .branch-8 .main-node { background: linear-gradient(135deg, #32D74B, #00C7BE); }
+        .branch-9 .main-node { background: linear-gradient(135deg, #FFD60A, #FF9F0A); }
+        .branch-10 .main-node { background: linear-gradient(135deg, #64D2FF, #007AFF); }
+        
+        .legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            z-index: 200;
+        }
+        
+        .legend h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 200;
+        }
+        
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .learning-path {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            z-index: 200;
+            max-width: 200px;
+        }
+        
+        .path-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .step-number {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .animate-in {
+            animation: fadeInScale 0.5s ease forwards;
+        }
+        
+        @media (max-width: 768px) {
+            .central-node {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .central-text {
+                font-size: 14px;
+            }
+            
+            .main-node {
+                width: 100px;
+                height: 50px;
+                font-size: 12px;
+            }
+            
+            .sub-node {
+                font-size: 10px;
+                padding: 6px 12px;
+            }
+            
+            .legend, .learning-path {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mind-map">
+        <!-- 中心节点 -->
+        <div class="central-node" id="centralNode">
+            <div class="central-text">
+                iOS Swift<br>知识体系
+            </div>
+        </div>
+        
+        <!-- 图例 -->
+        <div class="legend">
+            <h3>📚 知识模块</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #FF6B35, #F7931E);"></div>
+                Swift 基础
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #007AFF, #5856D6);"></div>
+                UI 框架
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #34C759, #30D158);"></div>
+                数据存储
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #FF9500, #FF8800);"></div>
+                网络编程
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #5856D6, #AF52DE);"></div>
+                架构模式
+            </div>
+        </div>
+        
+        <!-- 学习路径 -->
+        <div class="learning-path">
+            <h3>🎯 学习路径</h3>
+            <div class="path-step">
+                <div class="step-number">1</div>
+                Swift 基础语法
+            </div>
+            <div class="path-step">
+                <div class="step-number">2</div>
+                UIKit 界面开发
+            </div>
+            <div class="path-step">
+                <div class="step-number">3</div>
+                数据存储网络
+            </div>
+            <div class="path-step">
+                <div class="step-number">4</div>
+                架构设计模式
+            </div>
+            <div class="path-step">
+                <div class="step-number">5</div>
+                高级特性优化
+            </div>
+            <div class="path-step">
+                <div class="step-number">6</div>
+                项目实战发布
+            </div>
+        </div>
+        
+        <!-- 控制按钮 -->
+        <div class="controls">
+            <button class="control-btn" onclick="expandAll()" title="展开全部">⊕</button>
+            <button class="control-btn" onclick="collapseAll()" title="收缩全部">⊖</button>
+            <button class="control-btn" onclick="resetView()" title="重置视图">⟲</button>
+        </div>
+    </div>
+
+    <script>
+        // 脑图数据结构
+        const mindMapData = {
+            branches: [
+                {
+                    id: 1,
+                    title: "Swift 基础",
+                    angle: 0,
+                    distance: 300,
+                    subNodes: [
+                        { text: "变量与常量", angle: -30, distance: 80 },
+                        { text: "数据类型", angle: -15, distance: 90 },
+                        { text: "控制流", angle: 0, distance: 85 },
+                        { text: "函数闭包", angle: 15, distance: 90 },
+                        { text: "类与结构体", angle: 30, distance: 95 },
+                        { text: "协议泛型", angle: 45, distance: 85 }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: "UI 框架",
+                    angle: 36,
+                    distance: 300,
+                    subNodes: [
+                        { text: "UIKit", angle: -20, distance: 80 },
+                        { text: "SwiftUI", angle: 0, distance: 85 },
+                        { text: "Auto Layout", angle: 20, distance: 90 },
+                        { text: "Navigation", angle: 40, distance: 85 },
+                        { text: "Animation", angle: 60, distance: 80 }
+                    ]
+                },
+                {
+                    id: 3,
+                    title: "数据存储",
+                    angle: 72,
+                    distance: 300,
+                    subNodes: [
+                        { text: "UserDefaults", angle: -25, distance: 85 },
+                        { text: "Core Data", angle: 0, distance: 90 },
+                        { text: "SQLite", angle: 25, distance: 80 },
+                        { text: "Keychain", angle: 50, distance: 85 },
+                        { text: "CloudKit", angle: 75, distance: 90 }
+                    ]
+                },
+                {
+                    id: 4,
+                    title: "网络编程",
+                    angle: 108,
+                    distance: 300,
+                    subNodes: [
+                        { text: "URLSession", angle: -30, distance: 85 },
+                        { text: "REST API", angle: -10, distance: 90 },
+                        { text: "Alamofire", angle: 15, distance: 80 },
+                        { text: "JSON解析", angle: 35, distance: 85 },
+                        { text: "缓存策略", angle: 55, distance: 90 }
+                    ]
+                },
+                {
+                    id: 5,
+                    title: "架构模式",
+                    angle: 144,
+                    distance: 300,
+                    subNodes: [
+                        { text: "MVC", angle: -25, distance: 80 },
+                        { text: "MVVM", angle: 0, distance: 85 },
+                        { text: "VIPER", angle: 25, distance: 90 },
+                        { text: "Coordinator", angle: 50, distance: 85 },
+                        { text: "Combine", angle: 75, distance: 80 }
+                    ]
+                },
+                {
+                    id: 6,
+                    title: "并发编程",
+                    angle: 180,
+                    distance: 300,
+                    subNodes: [
+                        { text: "GCD", angle: -30, distance: 80 },
+                        { text: "Operation", angle: -10, distance: 85 },
+                        { text: "async/await", angle: 15, distance: 90 },
+                        { text: "Actor", angle: 35, distance: 85 },
+                        { text: "Thread Safe", angle: 55, distance: 80 }
+                    ]
+                },
+                {
+                    id: 7,
+                    title: "开发工具",
+                    angle: 216,
+                    distance: 300,
+                    subNodes: [
+                        { text: "Xcode", angle: -25, distance: 80 },
+                        { text: "Instruments", angle: 0, distance: 85 },
+                        { text: "SPM", angle: 25, distance: 90 },
+                        { text: "CocoaPods", angle: 50, distance: 85 },
+                        { text: "Git", angle: 75, distance: 80 }
+                    ]
+                },
+                {
+                    id: 8,
+                    title: "测试调试",
+                    angle: 252,
+                    distance: 300,
+                    subNodes: [
+                        { text: "XCTest", angle: -20, distance: 80 },
+                        { text: "UI测试", angle: 10, distance: 85 },
+                        { text: "Mock", angle: 35, distance: 90 },
+                        { text: "Snapshot", angle: 60, distance: 85 }
+                    ]
+                },
+                {
+                    id: 9,
+                    title: "性能优化",
+                    angle: 288,
+                    distance: 300,
+                    subNodes: [
+                        { text: "内存管理", angle: -30, distance: 85 },
+                        { text: "启动优化", angle: 0, distance: 90 },
+                        { text: "图片优化", angle: 30, distance: 80 },
+                        { text: "Time Profiler", angle: 60, distance: 85 }
+                    ]
+                },
+                {
+                    id: 10,
+                    title: "发布部署",
+                    angle: 324,
+                    distance: 300,
+                    subNodes: [
+                        { text: "App Store", angle: -25, distance: 80 },
+                        { text: "TestFlight", angle: 10, distance: 85 },
+                        { text: "Fastlane", angle: 35, distance: 90 },
+                        { text: "CI/CD", angle: 60, distance: 85 }
+                    ]
+                }
+            ]
+        };
+        
+        let isExpanded = false;
+        
+        function createMindMap() {
+            const mindMap = document.querySelector('.mind-map');
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            mindMapData.branches.forEach((branch, index) => {
+                // 创建分支容器
+                const branchDiv = document.createElement('div');
+                branchDiv.className = `branch branch-${branch.id}`;
+                branchDiv.style.position = 'absolute';
+                branchDiv.style.top = '50%';
+                branchDiv.style.left = '50%';
+                
+                // 计算主节点位置
+                const radian = (branch.angle * Math.PI) / 180;
+                const x = Math.cos(radian) * branch.distance;
+                const y = Math.sin(radian) * branch.distance;
+                
+                // 创建连接线
+                const line = document.createElement('div');
+                line.className = 'branch-line';
+                line.style.width = `${branch.distance - 100}px`;
+                line.style.left = '0px';
+                line.style.top = '-1.5px';
+                line.style.transform = `rotate(${branch.angle}deg)`;
+                line.style.transformOrigin = 'left center';
+                branchDiv.appendChild(line);
+                
+                // 创建主节点
+                const mainNode = document.createElement('div');
+                mainNode.className = 'main-node';
+                mainNode.textContent = branch.title;
+                mainNode.style.left = `${x - 70}px`;
+                mainNode.style.top = `${y - 35}px`;
+                mainNode.setAttribute('data-branch-id', branch.id);
+                
+                // 添加点击事件
+                mainNode.addEventListener('click', () => toggleSubNodes(branch.id));
+                
+                branchDiv.appendChild(mainNode);
+                
+                // 创建子节点
+                branch.subNodes.forEach((subNode, subIndex) => {
+                    const subRadian = ((branch.angle + subNode.angle) * Math.PI) / 180;
+                    const subX = x + Math.cos(subRadian) * subNode.distance;
+                    const subY = y + Math.sin(subRadian) * subNode.distance;
+                    
+                    // 子节点连接线
+                    const subLine = document.createElement('div');
+                    subLine.className = 'sub-line';
+                    subLine.style.width = `${subNode.distance}px`;
+                    subLine.style.left = `${x}px`;
+                    subLine.style.top = `${y - 1}px`;
+                    subLine.style.transform = `rotate(${branch.angle + subNode.angle}deg)`;
+                    subLine.style.transformOrigin = 'left center';
+                    subLine.setAttribute('data-branch-id', branch.id);
+                    branchDiv.appendChild(subLine);
+                    
+                    // 子节点
+                    const subNodeDiv = document.createElement('div');
+                    subNodeDiv.className = 'sub-node';
+                    subNodeDiv.textContent = subNode.text;
+                    subNodeDiv.style.left = `${subX - 40}px`;
+                    subNodeDiv.style.top = `${subY - 15}px`;
+                    subNodeDiv.setAttribute('data-branch-id', branch.id);
+                    
+                    // 添加悬停效果
+                    subNodeDiv.addEventListener('mouseenter', function() {
+                        this.style.background = getComputedStyle(mainNode).background;
+                        this.style.color = 'white';
+                    });
+                    
+                    subNodeDiv.addEventListener('mouseleave', function() {
+                        this.style.background = 'rgba(255, 255, 255, 0.9)';
+                        this.style.color = '#333';
+                    });
+                    
+                    branchDiv.appendChild(subNodeDiv);
+                });
+                
+                mindMap.appendChild(branchDiv);
+                
+                // 添加动画延迟
+                setTimeout(() => {
+                    mainNode.classList.add('animate-in');
+                }, index * 100);
+            });
+        }
+        
+        function toggleSubNodes(branchId) {
+            const subNodes = document.querySelectorAll(`[data-branch-id="${branchId}"].sub-node`);
+            const subLines = document.querySelectorAll(`[data-branch-id="${branchId}"].sub-line`);
+            
+            subNodes.forEach((node, index) => {
+                setTimeout(() => {
+                    if (node.style.opacity === '0' || node.style.opacity === '') {
+                        node.style.opacity = '1';
+                        node.style.transform = 'scale(1)';
+                    } else {
+                        node.style.opacity = '0';
+                        node.style.transform = 'scale(0.8)';
+                    }
+                }, index * 50);
+            });
+            
+            subLines.forEach((line, index) => {
+                setTimeout(() => {
+                    if (line.style.opacity === '0' || line.style.opacity === '') {
+                        line.style.opacity = '1';
+                    } else {
+                        line.style.opacity = '0';
+                    }
+                }, index * 50);
+            });
+        }
+        
+        function expandAll() {
+            mindMapData.branches.forEach(branch => {
+                const subNodes = document.querySelectorAll(`[data-branch-id="${branch.id}"].sub-node`);
+                const subLines = document.querySelectorAll(`[data-branch-id="${branch.id}"].sub-line`);
+                
+                subNodes.forEach((node, index) => {
+                    setTimeout(() => {
+                        node.style.opacity = '1';
+                        node.style.transform = 'scale(1)';
+                    }, index * 20);
+                });
+                
+                subLines.forEach((line, index) => {
+                    setTimeout(() => {
+                        line.style.opacity = '1';
+                    }, index * 20);
+                });
+            });
+            isExpanded = true;
+        }
+        
+        function collapseAll() {
+            const allSubNodes = document.querySelectorAll('.sub-node');
+            const allSubLines = document.querySelectorAll('.sub-line');
+            
+            allSubNodes.forEach((node, index) => {
+                setTimeout(() => {
+                    node.style.opacity = '0';
+                    node.style.transform = 'scale(0.8)';
+                }, index * 10);
+            });
+            
+            allSubLines.forEach((line, index) => {
+                setTimeout(() => {
+                    line.style.opacity = '0';
+                }, index * 10);
+            });
+            isExpanded = false;
+        }
+        
+        function resetView() {
+            location.reload();
+        }
+        
+        // 中心节点点击事件
+        document.getElementById('centralNode').addEventListener('click', () => {
+            if (!isExpanded) {
+                expandAll();
+            } else {
+                collapseAll();
+            }
+        });
+        
+        // 初始化脑图
+        document.addEventListener('DOMContentLoaded', () => {
+            createMindMap();
+            
+            // 3秒后自动展开一些节点作为演示
+            setTimeout(() => {
+                [1, 2, 5].forEach(id => toggleSubNodes(id));
+            }, 2000);
+        });
+        
+        // 响应式处理
+        window.addEventListener('resize', () => {
+            // 简单的响应式处理
+            if (window.innerWidth < 768) {
+                document.querySelector('.legend').style.display = 'none';
+                document.querySelector('.learning-path').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

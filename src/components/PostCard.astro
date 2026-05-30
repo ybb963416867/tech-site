@@ -13,8 +13,10 @@ const date = post.data.pubDate.toLocaleDateString('zh-CN', {
   month: '2-digit',
   day: '2-digit'
 });
+const firstHeading = post.body.match(/^#\s+(.+)$/m)?.[1] || '';
 const searchText = [
   post.data.title,
+  firstHeading,
   post.data.description,
   column,
   post.slug,

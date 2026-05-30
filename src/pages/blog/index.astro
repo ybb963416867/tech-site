@@ -29,69 +29,82 @@ const posts = await getPosts();
       <button class="archive-search-reset" type="button" data-archive-search-reset disabled>显示全部</button>
     </div>
   </section>
-  <section class="shell post-list">
+  <section class="shell post-list" data-archive-list>
     {posts.map((post) => <PostCard post={post} />)}
   </section>
   <p class="shell archive-empty" data-archive-empty hidden>没有找到匹配的文章。</p>
   <script>
-    const input = document.querySelector('[data-archive-search]');
-    const meta = document.querySelector('[data-archive-search-meta]');
-    const reset = document.querySelector('[data-archive-search-reset]');
-    const empty = document.querySelector('[data-archive-empty]');
-    const cards = Array.from(document.querySelectorAll('[data-post-card]'));
-    const normalize = (value: string) =>
-      value
-        .toLocaleLowerCase()
-        .normalize('NFKC')
-        .replace(/[-_/]+/g, ' ')
-        .replace(/\\s+/g, ' ')
-        .trim();
+    function initArchiveSearch() {
+      const input = document.querySelector<HTMLInputElement>('[data-archive-search]');
+      const meta = document.querySelector('[data-archive-search-meta]');
+      const reset = document.querySelector('[data-archive-search-reset]');
+      const empty = document.querySelector('[data-archive-empty]');
+      const list = document.querySelector('[data-archive-list]');
+      const cards = Array.from(document.querySelectorAll('[data-post-card]'));
 
-    const compact = (value: string) => normalize(value).replace(/\\s+/g, '');
-    const total = cards.length;
+      if (!input) return;
+      const searchInput = input;
 
-    function applySearch() {
-      if (!(input instanceof HTMLInputElement)) return;
+      const normalize = (value: string) =>
+        value
+          .toLocaleLowerCase()
+          .normalize('NFKC')
+          .replace(/[-_/]+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
 
-      const query = normalize(input.value);
-      const compactQuery = compact(input.value);
-      const terms = query.split(' ').filter(Boolean);
-      let visibleCount = 0;
+      const compact = (value: string) => normalize(value).replace(/\s+/g, '');
+      const total = cards.length;
 
-      cards.forEach((card) => {
-        if (!(card instanceof HTMLElement)) return;
+      function applySearch() {
+        const query = normalize(searchInput.value);
+        const compactQuery = compact(searchInput.value);
+        const terms = query.split(' ').filter(Boolean);
+        let visibleCount = 0;
 
-        const text = normalize(card.dataset.searchText || card.textContent || '');
-        const compactText = compact(card.dataset.searchText || card.textContent || '');
-        const matched =
-          terms.length === 0 ||
-          terms.every((term) => text.includes(term) || compactText.includes(term)) ||
-          (compactQuery.length > 0 && compactText.includes(compactQuery));
+        cards.forEach((card) => {
+          if (!(card instanceof HTMLElement)) return;
 
-        card.hidden = !matched;
-        if (matched) visibleCount += 1;
+          const source = card.dataset.searchText || card.textContent || '';
+          const text = normalize(source);
+          const compactText = compact(source);
+          const matched =
+            terms.length === 0 ||
+            terms.every((term: string) => text.includes(term) || compactText.includes(term)) ||
+            (compactQuery.length > 0 && compactText.includes(compactQuery));
+
+          card.hidden = !matched;
+          card.classList.toggle('is-search-match', matched && query.length > 0);
+          if (matched) visibleCount += 1;
+        });
+
+        if (list instanceof HTMLElement) {
+          list.classList.toggle('is-filtering', query.length > 0);
+        }
+
+        if (meta) {
+          meta.textContent = query ? `找到 ${visibleCount} / ${total} 篇文章` : `共 ${total} 篇文章`;
+        }
+
+        if (reset instanceof HTMLButtonElement) {
+          reset.disabled = query.length === 0;
+        }
+
+        if (empty instanceof HTMLElement) {
+          empty.hidden = query.length === 0 || visibleCount > 0;
+        }
+      }
+
+      searchInput.addEventListener('input', applySearch);
+      reset?.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        applySearch();
       });
-
-      if (meta) {
-        meta.textContent = query ? `找到 ${visibleCount} / ${total} 篇文章` : `共 ${total} 篇文章`;
-      }
-
-      if (reset instanceof HTMLButtonElement) {
-        reset.disabled = query.length === 0;
-      }
-
-      if (empty instanceof HTMLElement) {
-        empty.hidden = query.length === 0 || visibleCount > 0;
-      }
+      applySearch();
     }
 
-    input?.addEventListener('input', applySearch);
-    reset?.addEventListener('click', () => {
-      if (!(input instanceof HTMLInputElement)) return;
-      input.value = '';
-      input.focus();
-      applySearch();
-    });
-    applySearch();
+    initArchiveSearch();
+    document.addEventListener('astro:page-load', initArchiveSearch);
   </script>
 </BaseLayout>

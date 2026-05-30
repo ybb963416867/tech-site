@@ -172,7 +172,7 @@ const parentHref =
       mobileFolders.map((folder) => {
         const slugs = [...activeSlugs, folder.slug];
         return (
-          <a class="mobile-file-card folder" href={makeHref(slugs)}>
+          <a class="mobile-file-card folder" href={makeHref(slugs)} data-mobile-file-link>
             <span class="mobile-folder-icon" aria-hidden="true"></span>
             <span class="mobile-file-content">
               <strong>{folder.name}</strong>
@@ -194,7 +194,7 @@ const parentHref =
         });
 
         return (
-          <a class="mobile-file-card note" href={makeMobilePostHref(post)}>
+          <a class="mobile-file-card note" href={makeMobilePostHref(post)} data-mobile-file-link>
             <span class="mobile-note-icon" aria-hidden="true">M</span>
             <span class="mobile-file-content">
               <strong>{post.data.title}</strong>
@@ -336,4 +336,22 @@ const parentHref =
   }
 
   syncTree();
+
+  function initMobileFileRestore() {
+    const browser = document.querySelector<HTMLElement>('.mobile-file-browser');
+    if (!browser) return;
+
+    if (browser.dataset.restoreReady !== 'true') {
+      browser.addEventListener('click', (event) => {
+        const link = event.target instanceof Element ? event.target.closest('[data-mobile-file-link]') : null;
+        if (link instanceof HTMLAnchorElement) {
+          link.blur();
+        }
+      });
+
+      browser.dataset.restoreReady = 'true';
+    }
+  }
+
+  initMobileFileRestore();
 </script>

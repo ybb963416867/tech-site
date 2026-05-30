@@ -1,0 +1,157 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  initialLimit?: number;
+  searchLabel?: string;
+  listLabel?: string;
+}
+
+const { posts, initialLimit = 0, searchLabel = '搜索文章', listLabel = '文章列表' } = Astro.props;
+const visiblePosts = initialLimit > 0 ? posts.slice(0, initialLimit) : posts;
+const hiddenPosts = initialLimit > 0 ? posts.slice(initialLimit) : [];
+const hasInitialLimit = initialLimit > 0 && hiddenPosts.length > 0;
+---
+
+<section class="shell archive-search" aria-label={searchLabel}>
+  <label class="archive-search-box">
+    <span>{searchLabel}</span>
+    <input
+      type="search"
+      placeholder="输入 OpenAI Codex CLI、Swift、Git..."
+      autocomplete="off"
+      data-archive-search
+    />
+  </label>
+  <div class="archive-search-actions">
+    <p class="archive-search-meta" data-archive-search-meta>
+      {hasInitialLimit ? `最新 ${visiblePosts.length} / 共 ${posts.length} 篇文章` : `共 ${posts.length} 篇文章`}
+    </p>
+    <button class="archive-search-reset" type="button" data-archive-search-reset disabled>显示全部</button>
+  </div>
+</section>
+
+<section
+  class="shell post-list"
+  aria-label={listLabel}
+  data-archive-list
+  data-initial-limit={initialLimit}
+  data-total-count={posts.length}
+>
+  {visiblePosts.map((post) => <PostCard post={post} />)}
+  {hiddenPosts.map((post) => <PostCard post={post} initialHidden />)}
+</section>
+<p class="shell archive-empty" data-archive-empty hidden>没有找到匹配的文章。</p>
+
+<script>
+  function initArchiveSearch() {
+    const input = document.querySelector<HTMLInputElement>('[data-archive-search]');
+    const meta = document.querySelector('[data-archive-search-meta]');
+    const reset = document.querySelector('[data-archive-search-reset]');
+    const empty = document.querySelector('[data-archive-empty]');
+    const list = document.querySelector<HTMLElement>('[data-archive-list]');
+    const cards = Array.from(document.querySelectorAll('[data-post-card]'));
+
+    if (!input || !list) return;
+    const searchInput = input;
+    const resultList = list;
+    const total = Number(list.dataset.totalCount || cards.length);
+    const initialLimit = Number(list.dataset.initialLimit || 0);
+    const hasInitialLimit = initialLimit > 0 && initialLimit < total;
+    const storageKey = `article-list:${window.location.pathname}`;
+
+    const normalize = (value: string) =>
+      value
+        .toLocaleLowerCase()
+        .normalize('NFKC')
+        .replace(/[-_/]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const compact = (value: string) => normalize(value).replace(/\s+/g, '');
+
+    function saveState() {
+      try {
+        sessionStorage.setItem(
+          storageKey,
+          JSON.stringify({
+            searchQuery: searchInput.value
+          })
+        );
+      } catch {
+        // Session storage can be unavailable in private browsing modes.
+      }
+    }
+
+    function applySearch() {
+      const query = normalize(searchInput.value);
+      const compactQuery = compact(searchInput.value);
+      const terms = query.split(' ').filter(Boolean);
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        if (!(card instanceof HTMLElement)) return;
+
+        if (terms.length === 0) {
+          const initialHidden = card.dataset.initialHidden === 'true';
+          card.hidden = initialHidden;
+          card.classList.remove('is-search-match');
+          if (!initialHidden) visibleCount += 1;
+          return;
+        }
+
+        const source = card.dataset.searchText || card.textContent || '';
+        const text = normalize(source);
+        const compactText = compact(source);
+        const matched =
+          terms.every((term: string) => text.includes(term) || compactText.includes(term)) ||
+          (compactQuery.length > 0 && compactText.includes(compactQuery));
+
+        card.hidden = !matched;
+        card.classList.toggle('is-search-match', matched);
+        if (matched) visibleCount += 1;
+      });
+
+      resultList.classList.toggle('is-filtering', query.length > 0);
+
+      if (meta) {
+        meta.textContent = query
+          ? `找到 ${visibleCount} / ${total} 篇文章`
+          : hasInitialLimit
+            ? `最新 ${visibleCount} / 共 ${total} 篇文章`
+            : `共 ${total} 篇文章`;
+      }
+
+      if (reset instanceof HTMLButtonElement) {
+        reset.disabled = query.length === 0;
+      }
+
+      if (empty instanceof HTMLElement) {
+        empty.hidden = query.length === 0 || visibleCount > 0;
+      }
+    }
+
+    if (resultList.dataset.searchReady !== 'true') {
+      resultList.addEventListener('click', (event) => {
+        const link = event.target instanceof Element ? event.target.closest('[data-post-card]') : null;
+        if (link instanceof HTMLAnchorElement) {
+          saveState();
+          link.blur();
+        }
+      });
+
+      searchInput.addEventListener('input', applySearch);
+      reset?.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.focus();
+        applySearch();
+      });
+
+      resultList.dataset.searchReady = 'true';
+    }
+  }
+
+  initArchiveSearch();
+</script>

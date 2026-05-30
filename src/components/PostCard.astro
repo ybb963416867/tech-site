@@ -4,9 +4,10 @@ import { getPostColumnNames } from '../lib/posts';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  initialHidden?: boolean;
 }
 
-const { post } = Astro.props;
+const { initialHidden = false, post } = Astro.props;
 const column = getPostColumnNames(post).join(' / ');
 const date = post.data.pubDate.toLocaleDateString('zh-CN', {
   year: 'numeric',
@@ -24,7 +25,14 @@ const searchText = [
 ].join(' ');
 ---
 
-<a class="post-card" href={`/blog/${post.slug}/`} data-post-card data-search-text={searchText}>
+<a
+  class="post-card"
+  href={`/blog/${post.slug}/`}
+  data-post-card
+  data-initial-hidden={initialHidden ? 'true' : 'false'}
+  data-search-text={searchText}
+  hidden={initialHidden}
+>
   <time class="post-date" datetime={post.data.pubDate.toISOString()}>{date}</time>
   <div>
     <h2>{post.data.title}</h2>

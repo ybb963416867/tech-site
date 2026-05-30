@@ -12,26 +12,6 @@ draft: false
 
 ------
 
-## 目录
-
-1. [基本概念](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#基本概念)
-2. [仓库与检出](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#仓库与检出)
-3. [查看状态与日志](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#查看状态与日志)
-4. [文件操作](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#文件操作)
-5. [提交与更新](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#提交与更新)
-6. [分支与标签](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#分支与标签)
-7. [合并](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#合并)
-8. [撤销与回滚](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#撤销与回滚)
-9. [属性操作](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#属性操作)
-10. [差异对比](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#差异对比)
-11. [锁定机制](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#锁定机制)
-12. [仓库管理（svnadmin）](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#仓库管理svnadmin)
-13. [常用参数速查](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#常用参数速查)
-14. [常见场景示例](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#常见场景示例)
-15. [SVN 状态符号说明](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#svn-状态符号说明)
-
-------
-
 ## 基本概念
 
 <a id="basic-concepts"></a>

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import ArticleSearchList from '../../components/ArticleSearchList.astro';
 import { getPosts } from '../../lib/posts';
 
 const posts = await getPosts();
@@ -14,97 +14,5 @@ const posts = await getPosts();
       <p>所有 Markdown 文章会自动出现在这里，按发布时间倒序排列。</p>
     </div>
   </section>
-  <section class="shell archive-search" aria-label="文章搜索">
-    <label class="archive-search-box">
-      <span>搜索文章</span>
-      <input
-        type="search"
-        placeholder="输入 OpenAI Codex CLI、Swift、Git..."
-        autocomplete="off"
-        data-archive-search
-      />
-    </label>
-    <div class="archive-search-actions">
-      <p class="archive-search-meta" data-archive-search-meta>共 {posts.length} 篇文章</p>
-      <button class="archive-search-reset" type="button" data-archive-search-reset disabled>显示全部</button>
-    </div>
-  </section>
-  <section class="shell post-list" data-archive-list>
-    {posts.map((post) => <PostCard post={post} />)}
-  </section>
-  <p class="shell archive-empty" data-archive-empty hidden>没有找到匹配的文章。</p>
-  <script>
-    function initArchiveSearch() {
-      const input = document.querySelector<HTMLInputElement>('[data-archive-search]');
-      const meta = document.querySelector('[data-archive-search-meta]');
-      const reset = document.querySelector('[data-archive-search-reset]');
-      const empty = document.querySelector('[data-archive-empty]');
-      const list = document.querySelector('[data-archive-list]');
-      const cards = Array.from(document.querySelectorAll('[data-post-card]'));
-
-      if (!input) return;
-      const searchInput = input;
-
-      const normalize = (value: string) =>
-        value
-          .toLocaleLowerCase()
-          .normalize('NFKC')
-          .replace(/[-_/]+/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim();
-
-      const compact = (value: string) => normalize(value).replace(/\s+/g, '');
-      const total = cards.length;
-
-      function applySearch() {
-        const query = normalize(searchInput.value);
-        const compactQuery = compact(searchInput.value);
-        const terms = query.split(' ').filter(Boolean);
-        let visibleCount = 0;
-
-        cards.forEach((card) => {
-          if (!(card instanceof HTMLElement)) return;
-
-          const source = card.dataset.searchText || card.textContent || '';
-          const text = normalize(source);
-          const compactText = compact(source);
-          const matched =
-            terms.length === 0 ||
-            terms.every((term: string) => text.includes(term) || compactText.includes(term)) ||
-            (compactQuery.length > 0 && compactText.includes(compactQuery));
-
-          card.hidden = !matched;
-          card.classList.toggle('is-search-match', matched && query.length > 0);
-          if (matched) visibleCount += 1;
-        });
-
-        if (list instanceof HTMLElement) {
-          list.classList.toggle('is-filtering', query.length > 0);
-        }
-
-        if (meta) {
-          meta.textContent = query ? `找到 ${visibleCount} / ${total} 篇文章` : `共 ${total} 篇文章`;
-        }
-
-        if (reset instanceof HTMLButtonElement) {
-          reset.disabled = query.length === 0;
-        }
-
-        if (empty instanceof HTMLElement) {
-          empty.hidden = query.length === 0 || visibleCount > 0;
-        }
-      }
-
-      searchInput.addEventListener('input', applySearch);
-      reset?.addEventListener('click', () => {
-        searchInput.value = '';
-        searchInput.focus();
-        applySearch();
-      });
-      applySearch();
-    }
-
-    initArchiveSearch();
-    document.addEventListener('astro:page-load', initArchiveSearch);
-  </script>
+  <ArticleSearchList posts={posts} searchLabel="搜索文章" listLabel="全部文章" />
 </BaseLayout>

@@ -2,7 +2,7 @@
 title: "Mcp-进阶"
 description: "uvx 执行，包"
 pubDate: 2026-05-29
-category: "ai"
+category: "Ai"
 tags: [Mac, Shell, Environment]
 draft: false
 ---

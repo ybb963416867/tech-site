@@ -937,7 +937,7 @@ h3 {
     align-items: center;
     gap: 10px;
     min-height: 66px;
-    margin: 0 -12px;
+    margin: 0;
     border-bottom: 1px solid var(--line);
     padding: 13px 12px;
     background: color-mix(in srgb, var(--bg) 88%, transparent);
@@ -959,7 +959,7 @@ h3 {
 
   .mobile-post-rule:not([hidden]) {
     display: block;
-    margin: 0 -12px 18px;
+    margin: 0 0 18px;
   }
 
   .mobile-file-header {

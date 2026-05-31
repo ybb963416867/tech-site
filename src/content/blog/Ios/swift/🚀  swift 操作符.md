@@ -2,7 +2,7 @@
 title: "swift 操作符"
 description: "本文档整理了 Swift 中的比较运算符、它们在 for 和 while 循环中的使用方法，以及相关的逻辑和模式匹配运算符，帮助开发者理解和应用这些运算符控制程序流程。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift]
 draft: false
 ---

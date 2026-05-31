@@ -2,7 +2,7 @@
 title: "agent"
 description: "/plugin marketplace add jshchnz/claudecodescheduler /plugin install scheduler@claudescheduler"
 pubDate: 2026-05-29
-category: "ai"
+category: "Ai"
 tags: [Mac]
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: "makedown语法"
 description: "本文档涵盖 Markdown 的全部标准语法及常用扩展语法，适合快速查阅与学习。"
 pubDate: 2026-05-29
-category: "工作"
+category: "Work"
 tags: [Git, Mac, Shell, Markdown, JavaScript]
 draft: false
 ---

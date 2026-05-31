@@ -2,7 +2,7 @@
 title: "aosp编译"
 description: "<https://www.jianshu.com/p/53941de91c77"
 pubDate: 2026-05-29
-category: "系统"
+category: "System"
 tags: [Git]
 draft: false
 ---

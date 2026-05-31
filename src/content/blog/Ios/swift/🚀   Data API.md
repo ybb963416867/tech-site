@@ -2,7 +2,7 @@
 title: "Data API"
 description: "Data 是 Swift Foundation 框架中的一个结构体，用于表示字节缓冲区。它是一个值类型，提供了强大的数据操作功能，常用于网络请求、文件操作、加密解密等场景。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [iOS, Swift, Array, API]
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: "Proxifier的安装及使用教程"
 description: "[The Most Advanced Proxy Client 下载](https://www.proxifier.com/)"
 pubDate: 2026-05-29
-category: "工作"
+category: "Work"
 tags: [Git]
 draft: false
 ---

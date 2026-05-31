@@ -2,7 +2,7 @@
 title: "FileManager 类 API 文档"
 description: "FileManager 是 Foundation 框架中的一个类，用于管理文件系统中的文件、目录和 URL。它常用于创建目录、移动文件、检查文件是否存在以及访问标准目录（如文档目录或缓存目录）。通常使用其默认实例 FileManage..."
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [iOS, Swift, API]
 draft: false
 ---

@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { readdirSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -16,6 +17,65 @@ export interface ColumnPath {
   names: string[];
   slugs: string[];
   count: number;
+}
+
+let canonicalDirectoryPathMap: Map<string, string[]> | undefined;
+
+function pathKey(segments: string[]) {
+  return segments.join('/').toLocaleLowerCase();
+}
+
+function getCanonicalDirectoryPathMap() {
+  if (canonicalDirectoryPathMap) return canonicalDirectoryPathMap;
+
+  const paths = new Map<string, string[]>();
+
+  function walk(dirPath: string, segments: string[] = []) {
+    let entries;
+
+    try {
+      entries = readdirSync(dirPath, { withFileTypes: true });
+    } catch {
+      return false;
+    }
+
+    let hasMarkdown = false;
+    const childDirectories: string[][] = [];
+
+    for (const entry of entries) {
+      if (entry.name.startsWith('.')) continue;
+
+      if (entry.isFile() && entry.name.endsWith('.md')) {
+        hasMarkdown = true;
+        continue;
+      }
+
+      if (!entry.isDirectory()) continue;
+
+      const nextSegments = [...segments, entry.name];
+      const childHasMarkdown = walk(join(dirPath, entry.name), nextSegments);
+
+      if (childHasMarkdown) {
+        hasMarkdown = true;
+        childDirectories.push(nextSegments);
+      }
+    }
+
+    for (const childPath of childDirectories) {
+      paths.set(pathKey(childPath), childPath);
+    }
+
+    return hasMarkdown;
+  }
+
+  walk(BLOG_DIR);
+  canonicalDirectoryPathMap = paths;
+  return paths;
+}
+
+function canonicalizeDirectorySegments(segments: string[]) {
+  const canonical = getCanonicalDirectoryPathMap().get(pathKey(segments));
+  return canonical || segments;
 }
 
 export async function getPosts() {
@@ -51,13 +111,29 @@ export async function getCategories() {
   return Array.from(categories.entries()).sort(([a], [b]) => a.localeCompare(b));
 }
 
-export function getPostColumnNames(post: CollectionEntry<'blog'>) {
+function getPostPathSegments(post: CollectionEntry<'blog'>) {
+  const filePath = post.filePath?.replace(/\\/g, '/');
+  const marker = 'src/content/blog/';
+
+  if (filePath) {
+    const relativePath = filePath.includes(marker) ? filePath.slice(filePath.indexOf(marker) + marker.length) : filePath;
+    const segments = relativePath.split('/').slice(0, -1).filter(Boolean);
+
+    if (segments.length > 0) {
+      return canonicalizeDirectorySegments(segments);
+    }
+  }
+
   const segments = post.id.split('/').slice(0, -1);
-  return segments.length > 0 ? segments : [post.data.category];
+  return segments.length > 0 ? canonicalizeDirectorySegments(segments) : [post.data.category];
+}
+
+export function getPostColumnNames(post: CollectionEntry<'blog'>) {
+  return getPostPathSegments(post);
 }
 
 export function getPostColumnSlugs(post: CollectionEntry<'blog'>) {
-  return getPostColumnNames(post);
+  return getPostPathSegments(post);
 }
 
 async function getBlogDirectoryPaths() {
@@ -69,16 +145,33 @@ async function getBlogDirectoryPaths() {
     try {
       entries = await readdir(dirPath, { withFileTypes: true });
     } catch {
-      return;
+      return false;
     }
+
+    let hasMarkdown = false;
+    const childDirectories: string[][] = [];
 
     for (const entry of entries) {
-      if (!entry.isDirectory() || entry.name.startsWith('.')) continue;
+      if (entry.name.startsWith('.')) continue;
+
+      if (entry.isFile() && entry.name.endsWith('.md')) {
+        hasMarkdown = true;
+        continue;
+      }
+
+      if (!entry.isDirectory()) continue;
 
       const nextSegments = [...segments, entry.name];
-      paths.push(nextSegments);
-      await walk(join(dirPath, entry.name), nextSegments);
+      const childHasMarkdown = await walk(join(dirPath, entry.name), nextSegments);
+
+      if (childHasMarkdown) {
+        hasMarkdown = true;
+        childDirectories.push(nextSegments);
+      }
     }
+
+    paths.push(...childDirectories);
+    return hasMarkdown;
   }
 
   await walk(BLOG_DIR);

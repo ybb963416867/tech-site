@@ -94,6 +94,25 @@ function inferCategory(filePath, tags) {
   return matched?.[0] || tags[0] || 'Notes';
 }
 
+function syncFrontmatterField(frontmatter, key, value) {
+  const fieldLine = `${key}: "${escapeYaml(value)}"`;
+  return new RegExp(`^${key}:\\s*.*$`, 'm').test(frontmatter)
+    ? frontmatter.replace(new RegExp(`^${key}:\\s*.*$`, 'm'), fieldLine)
+    : `${frontmatter}\n${fieldLine}`;
+}
+
+function syncManagedFrontmatter(content, { category, title }) {
+  const match = content.match(/^---\n([\s\S]*?)\n---/);
+
+  if (!match) return content;
+
+  const frontmatter = match[1];
+  const nextFrontmatter = syncFrontmatterField(syncFrontmatterField(frontmatter, 'title', title), 'category', category);
+
+  if (nextFrontmatter === frontmatter) return content;
+  return content.replace(/^---\n[\s\S]*?\n---/, `---\n${nextFrontmatter}\n---`);
+}
+
 function escapeYaml(value) {
   return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
@@ -119,7 +138,17 @@ const files = await listMarkdownFiles(BLOG_DIR_PATH);
 
 for (const file of files) {
   const raw = await readFile(file.path, 'utf8');
-  if (hasFrontmatter(raw)) continue;
+  if (hasFrontmatter(raw)) {
+    const category = inferCategory(file.path, []);
+    const title = extractTitle(file.name);
+    const synced = syncManagedFrontmatter(raw, { category, title });
+    if (synced !== raw) {
+      await writeFile(file.path, synced, 'utf8');
+      converted += 1;
+      console.log(`Synced frontmatter ${file.name}`);
+    }
+    continue;
+  }
 
   const body = stripToc(raw);
   const title = extractTitle(file.name);

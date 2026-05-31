@@ -2,7 +2,7 @@
 title: "DispatchSemaphore 完全指南"
 description: ""
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Mac, iOS, Swift, API]
 draft: false
 ---

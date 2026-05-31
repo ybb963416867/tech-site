@@ -2,7 +2,7 @@
 title: "Concurrency API 完整指南"
 description: "Swift Concurrency 提供了一套完整的现代并发编程工具："
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift, API]
 draft: false
 ---

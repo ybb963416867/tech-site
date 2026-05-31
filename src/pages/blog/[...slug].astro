@@ -1,7 +1,7 @@
 ---
 import { type CollectionEntry } from 'astro:content';
 import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
-import { getPosts } from '../../lib/posts';
+import { getPostColumnNames, getPostColumnSlugs, getPosts } from '../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -17,8 +17,10 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content, headings } = await post.render();
+const columnNames = getPostColumnNames(post);
+const columnSlugs = getPostColumnSlugs(post);
 ---
 
-<BlogPostLayout frontmatter={post.data} headings={headings}>
+<BlogPostLayout frontmatter={post.data} headings={headings} columnNames={columnNames} columnSlugs={columnSlugs}>
   <Content />
 </BlogPostLayout>

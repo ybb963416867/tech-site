@@ -2,7 +2,7 @@
 title: "Swift Array API 完整指南"
 description: "Array<Element 是 Swift 中的核心集合类型，它是一个有序的、动态的、泛型的集合。Array 在 Swift 5.9+ 中标记为 @frozen，这意味着其内存布局是固定的，可以进行更好的优化。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift, Array, API]
 draft: false
 ---

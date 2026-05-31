@@ -2,7 +2,7 @@
 title: "Swift Thread API 完整指南"
 description: "[概述](概述) [创建和启动线程](创建和启动线程) [线程属性](线程属性) [线程状态](线程状态) [线程控制](线程控制) [线程本地存储](线程本地存储) [线程优先级](线程优先级) [线程通知](线程通知) [实际应用..."
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift, API]
 draft: false
 ---

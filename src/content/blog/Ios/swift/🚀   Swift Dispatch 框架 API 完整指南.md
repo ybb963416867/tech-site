@@ -2,7 +2,7 @@
 title: "Swift Dispatch 框架 API 完整指南"
 description: "Dispatch 框架（也称为 Grand Central Dispatch，GCD）是 Swift 中用于并发编程的核心框架。它提供了一套强大的 API 来管理任务的并发执行、队列管理和线程同步。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Mac, iOS, Swift, Array, API]
 draft: false
 ---

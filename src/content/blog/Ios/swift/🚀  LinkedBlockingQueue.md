@@ -2,7 +2,7 @@
 title: "LinkedBlockingQueue"
 description: "LinkedBlockingQueue 的技术笔记。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift, API]
 draft: false
 ---

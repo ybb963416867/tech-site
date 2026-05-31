@@ -47,7 +47,7 @@ for (const post of allPosts) {
 }
 
 function makeHref(slugs: string[]) {
-  return `/categories/${slugs.map((slug) => encodeURIComponent(slug)).join('/')}/`;
+  return `/categories/${slugs.map((slug) => encodeURI(slug)).join('/')}/`;
 }
 
 function makeMobilePostHref(post: CollectionEntry<'blog'>) {

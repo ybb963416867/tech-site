@@ -1,5 +1,5 @@
 ---
-title: "ios 常用命令"
+title: "Ios 常用命令"
 description: "进入目录"
 pubDate: 2026-05-29
 category: "Ios"

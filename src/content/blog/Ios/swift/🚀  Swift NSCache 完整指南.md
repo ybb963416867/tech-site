@@ -2,7 +2,7 @@
 title: "Swift NSCache 完整指南"
 description: "NSCache 是 Foundation 框架中的一个线程安全的缓存类，用于存储临时的键值对数据。与字典不同，NSCache 会在内存压力大时自动移除一些对象，避免应用崩溃。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [iOS, Swift, API]
 draft: false
 ---

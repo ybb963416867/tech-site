@@ -2,7 +2,7 @@
 title: "iOS Swift 知识体系脑图"
 description: "🚀 Swift 基础 ┌─────────────────────────────┐ 📝 变量与常量 🔢 数据类型 🔄 控制流 ⚡函数闭包 🏗️ 类与结构体 📋 协议泛型 └─────────┬──────────────..."
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [GitHub Actions, Git, iOS, Environment, Swift, Array, API]
 draft: false
 ---

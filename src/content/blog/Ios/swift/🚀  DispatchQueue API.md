@@ -2,7 +2,7 @@
 title: "DispatchQueue API"
 description: "DispatchQueue 是 GCD（Grand Central Dispatch）的核心，用于在多核处理器上执行并发任务。以下是对其 API 的全面介绍及使用示例。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift, API]
 draft: false
 ---

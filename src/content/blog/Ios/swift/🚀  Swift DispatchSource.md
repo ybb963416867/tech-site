@@ -2,7 +2,7 @@
 title: "Swift DispatchSource"
 description: "DispatchSource 是 Grand Central Dispatch (GCD) 的一个重要组件，用于监听和响应系统事件。它提供了一种异步、高效的方式来处理各种系统级事件，如文件系统变化、网络事件、定时器等。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Mac, iOS, Swift, API]
 draft: false
 ---

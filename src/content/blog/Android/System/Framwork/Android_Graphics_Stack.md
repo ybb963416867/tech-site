@@ -2,7 +2,7 @@
 title: "Android_Graphics_Stack"
 description: "Android 图形栈是一套分层协作的渲染体系，从应用层的 View 声明出发，经过测量/布局/绘制、硬件加速录制、RenderThread 提交、SurfaceFlinger 合成，最终由 HWC/GPU 送显到屏幕。整个链路可以用..."
 pubDate: 2026-05-30
-category: "framwork"
+category: "Framwork"
 tags: [API]
 draft: false
 ---

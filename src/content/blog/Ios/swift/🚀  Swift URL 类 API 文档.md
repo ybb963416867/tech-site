@@ -2,7 +2,7 @@
 title: "Swift URL 类 API 文档"
 description: "以下是对 Swift 中 URL 类的所有 API 及其参数的详细介绍，整理为中文 Markdown 文档，包含调用方法示例和输出结果。URL 类是 Foundation 框架中用于表示和操作统一资源定位符（URL）的核心类，广泛用于..."
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Markdown, Swift, API]
 draft: false
 ---

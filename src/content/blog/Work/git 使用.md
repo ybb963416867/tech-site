@@ -2,7 +2,7 @@
 title: "git 使用"
 description: "创建分支"
 pubDate: 2026-05-29
-category: "工作"
+category: "Work"
 tags: [Git, Mac, iOS, Shell, Swift]
 draft: false
 ---

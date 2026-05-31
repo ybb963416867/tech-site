@@ -2,7 +2,7 @@
 title: "MCP_介绍"
 description: "Model Context Protocol —— AI 与外部世界的标准化桥梁"
 pubDate: 2026-05-29
-category: "ai"
+category: "Ai"
 tags: [Git, Mac, iOS, Shell, API, TypeScript]
 draft: false
 ---

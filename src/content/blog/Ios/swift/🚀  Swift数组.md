@@ -2,7 +2,7 @@
 title: "Swift数组"
 description: "Swift Array 提供了丰富的 API，主要包括："
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift, Array, API]
 draft: false
 ---

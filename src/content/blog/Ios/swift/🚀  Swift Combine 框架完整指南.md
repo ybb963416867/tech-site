@@ -2,7 +2,7 @@
 title: "Swift Combine 框架完整指南"
 description: "Combine 是 Apple 从 iOS 13 开始推出的响应式编程框架，它允许你以声明式的方式处理异步事件流。本指南包括基础概念、公共及自定义类型、常用操作等组成细节。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [iOS, Swift, Array, API]
 draft: false
 ---

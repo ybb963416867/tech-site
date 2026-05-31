@@ -2,7 +2,7 @@
 title: "AsynQueue swift 自定义高性能的阻塞的队列（防止CPU空转）"
 description: "用法"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift]
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: "Swift String 完整参考手册"
 description: ""
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [iOS, Swift, Array, API]
 draft: false
 ---

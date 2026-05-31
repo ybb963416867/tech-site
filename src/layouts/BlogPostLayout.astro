@@ -14,14 +14,18 @@ interface Props {
     tags: string[];
   };
   headings: MarkdownHeading[];
+  columnNames?: string[];
+  columnSlugs?: string[];
 }
 
-const { frontmatter, headings } = Astro.props;
+const { columnNames = [Astro.props.frontmatter.category], columnSlugs = columnNames, frontmatter, headings } = Astro.props;
 const pubDate = frontmatter.pubDate.toLocaleDateString('zh-CN', {
   year: 'numeric',
   month: '2-digit',
   day: '2-digit'
 });
+const columnLabel = columnNames.join(' / ');
+const columnHref = `/categories/${columnSlugs.map((slug) => encodeURI(slug)).join('/')}/`;
 ---
 
 <BaseLayout title={frontmatter.title} description={frontmatter.description} type="article">
@@ -42,7 +46,7 @@ const pubDate = frontmatter.pubDate.toLocaleDateString('zh-CN', {
       <h1>{frontmatter.title}</h1>
       <p>{frontmatter.description}</p>
       <div class="tag-row">
-        <a class="tag" href={`/categories/${encodeURIComponent(frontmatter.category)}/`}>{frontmatter.category}</a>
+        <a class="tag" href={columnHref}>{columnLabel}</a>
         {frontmatter.tags.map((tag) => <a class="tag" href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}
       </div>
     </header>

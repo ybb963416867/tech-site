@@ -1,8 +1,8 @@
 ---
-title: "svn 使用"
+title: "Svn 使用"
 description: "Apache Subversion (SVN) 是一款集中式版本控制系统。本文档整理了日常开发中所有常用 SVN 命令及参数说明。"
 pubDate: 2026-05-29
-category: "工作"
+category: "Work"
 tags: [Mac]
 draft: false
 ---

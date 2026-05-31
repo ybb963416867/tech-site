@@ -2,7 +2,7 @@
 title: "zygote 的启动流程"
 description: "启动init进程 [源码链接](http://androidxref.com/9.0.0r3/xref/system/core/init/init.cpp)"
 pubDate: 2026-05-29
-category: "framwork"
+category: "Framwork"
 tags: [Array]
 draft: false
 ---

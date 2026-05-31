@@ -2,7 +2,7 @@
 title: "FileManager.default.url API 文档"
 description: "FileManager.default.url(for:in:appropriateFor:create:) 是 Swift 中 FileManager 类的一个方法，用于返回指定域中特定目录的 URL。它是文件系统操作的核心 API..."
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [iOS, Swift, API]
 draft: false
 ---

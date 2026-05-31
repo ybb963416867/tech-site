@@ -2,7 +2,7 @@
 title: "HandleThread"
 description: "HandleThread 的技术笔记。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Mac, Swift, API]
 draft: false
 ---

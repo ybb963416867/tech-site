@@ -2,7 +2,7 @@
 title: "DispatchQueue 各参数详解（Swift GCD 多线程）"
 description: "Swift 的 DispatchQueue 是 GCD (Grand Central Dispatch) 提供的 任务调度管理工具，用于 控制线程执行方式、优先级、执行模式等。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift]
 draft: false
 ---

@@ -2,7 +2,7 @@
 title: "SwiftUI PreferenceKey 完整指南 🚀"
 description: "[概述](概述) [PreferenceKey 协议](preferencekey协议) [核心 API](核心api) [使用场景](使用场景) [完整示例](完整示例) [高级用法](高级用法) [最佳实践](最佳实践)"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [iOS, Environment, Swift, API]
 draft: false
 ---

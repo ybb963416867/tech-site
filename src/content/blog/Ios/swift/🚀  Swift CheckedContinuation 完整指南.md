@@ -2,7 +2,7 @@
 title: "Swift CheckedContinuation 完整指南"
 description: "CheckedContinuation 是 Swift 5.5 引入的一个重要类型，用于将传统的基于回调的异步代码转换为现代的 async/await 模式。它提供了一种安全的方式来桥接旧的异步 API 和新的并发模型。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Git, Swift, Array, API]
 draft: false
 ---

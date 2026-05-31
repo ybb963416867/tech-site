@@ -2,7 +2,7 @@
 title: "BufferPointer"
 description: "BufferPointer 是 Swift 中用于安全访问内存缓冲区的类型。它提供了一种类型安全的方式来处理连续内存块，常用于与 C API 交互、性能优化和底层内存操作。"
 pubDate: 2026-05-29
-category: "swift"
+category: "Swift"
 tags: [Swift, Array, API]
 draft: false
 ---

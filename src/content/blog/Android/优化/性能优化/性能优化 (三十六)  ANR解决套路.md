@@ -1,3 +1,11 @@
+---
+title: "性能优化 (三十六) ANR解决套路"
+description: "性能优化 (三十六) ANR解决套路 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Git]
+draft: false
+---
 # ANR解决套路
 
 - adb pull  data/anr/traces.txt储存路径

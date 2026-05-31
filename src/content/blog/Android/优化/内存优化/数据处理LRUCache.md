@@ -1,3 +1,11 @@
+---
+title: "数据处理LRUCache"
+description: "接受固定容量的数据， 超过容量后，在后面追加，同时移除掉最老的， 动态扩容线程安全"
+pubDate: 2026-05-31
+category: "内存优化"
+tags: [Notes]
+draft: false
+---
 # 数据处理LRUCache
 
 > 接受固定容量的数据， 超过容量后，在后面追加，同时移除掉最老的， 动态扩容线程安全
@@ -79,7 +87,6 @@ open class LRUCache<K, V>(initialCapacity: Int, accessOrder: Boolean = true) {
     open fun findKeyByValue(value: V): K? = null
 
     open fun findRangeByValue(minValue: V, maxValue: V): List<K> = mutableListOf()
-
 
     @Synchronized
     fun clear(){

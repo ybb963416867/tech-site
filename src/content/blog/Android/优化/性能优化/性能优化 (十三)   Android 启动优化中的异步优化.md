@@ -1,3 +1,11 @@
+---
+title: "性能优化 (十三) Android 启动优化中的异步优化"
+description: "性能优化 (十三) Android 启动优化中的异步优化 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Git]
+draft: false
+---
 # Android 启动优化中的异步优化
 
 [![img](https://cdn2.jianshu.io/assets/default_avatar/1-04bbeead395d74921af6a4e8214b4f61.jpg)

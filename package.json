@@ -7,11 +7,12 @@
     "clean:cache": "node scripts/clean-generated.mjs",
     "clean:build": "node scripts/clean-generated.mjs --dist",
     "posts:normalize": "node scripts/normalize-posts.mjs",
+    "content:check-assets": "node scripts/check-content-assets.mjs",
     "dev": "node scripts/dev-server.mjs",
-    "build": "npm run clean:build && npm run posts:normalize && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
+    "build": "npm run clean:build && npm run posts:normalize && npm run content:check-assets && ASTRO_TELEMETRY_DISABLED=1 astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "npm run clean:cache && npm run posts:normalize && ASTRO_TELEMETRY_DISABLED=1 astro check"
+    "check": "npm run clean:cache && npm run posts:normalize && npm run content:check-assets && ASTRO_TELEMETRY_DISABLED=1 astro check"
   },
   "dependencies": {
     "@pagefind/default-ui": "^1.3.0",

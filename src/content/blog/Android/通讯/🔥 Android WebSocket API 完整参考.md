@@ -1,3 +1,11 @@
+---
+title: "Android WebSocket API 完整参考"
+description: "整理范围：WebSocket 协议原理（RFC 6455）、OkHttp WebSocket、Java 原生 WebSocket（JSR356 / javax.websocket）、Ktor WebSocket Client，以及常见..."
+pubDate: 2026-05-31
+category: "通讯"
+tags: [Array, API]
+draft: false
+---
 # Android WebSocket API 完整参考
 
 > 整理范围：WebSocket 协议原理（RFC 6455）、OkHttp WebSocket、Java 原生 WebSocket（JSR-356 / javax.websocket）、Ktor WebSocket Client，以及常见第三方库（Socket.IO Android、Scarlet）。

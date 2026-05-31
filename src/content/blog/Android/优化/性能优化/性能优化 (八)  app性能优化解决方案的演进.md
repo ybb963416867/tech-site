@@ -1,3 +1,11 @@
+---
+title: "性能优化 (八) app性能优化解决方案的演进"
+description: "性能优化 (八) app性能优化解决方案的演进 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # app性能优化解决方案的演进
 
 ## 项目初期

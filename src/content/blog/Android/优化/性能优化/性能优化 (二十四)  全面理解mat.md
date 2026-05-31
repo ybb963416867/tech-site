@@ -1,3 +1,11 @@
+---
+title: "性能优化 (二十四) 全面理解mat"
+description: "性能优化 (二十四) 全面理解mat 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [API]
+draft: false
+---
 # [内存分析工具 MAT 的使用 (转载）](https://www.cnblogs.com/bruce-he/p/8708392.html) 
 
 转载： https://blog.csdn.net/aaa2832/article/details/19419679

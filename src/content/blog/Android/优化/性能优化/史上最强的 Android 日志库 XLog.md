@@ -1,3 +1,11 @@
+---
+title: "史上最强的 Android 日志库 XLog"
+description: "史上最强的 Android 日志库 XLog 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Git, Array, CSS]
+draft: false
+---
 # 史上最强的 Android 日志库 XLog
 
 Github: [https://github.com/elvishew/xLog](https://link.jianshu.com/?t=https://github.com/elvishew/xLog)

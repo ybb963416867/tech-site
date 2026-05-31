@@ -1,3 +1,11 @@
+---
+title: "性能优化 (六) So瘦身实战"
+description: "性能优化 (六) So瘦身实战 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # So瘦身实战
 
 ## So 移除

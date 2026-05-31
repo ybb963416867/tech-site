@@ -1,3 +1,11 @@
+---
+title: "性能优化 (二十八) Android绘制原理及工具选择"
+description: "性能优化 (二十八) Android绘制原理及工具选择 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [API]
+draft: false
+---
 # Android绘制原理及工具选择
 
 - cpu负责计算显示内容

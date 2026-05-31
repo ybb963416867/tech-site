@@ -1,3 +1,11 @@
+---
+title: "Android_LocalSocket_IPC"
+description: "LocalSocket 是 Android 提供的基于 Unix Domain Socket（本地域套接字） 的进程间通信机制。与普通 TCP/UDP Socket 不同，它完全在内核内部通过文件系统路径传递数据，不经过网络协议栈，因..."
+pubDate: 2026-05-31
+category: "优化"
+tags: [Array]
+draft: false
+---
 # Android 进程间通信之 LocalSocket 详解
 
 ## 一、概述

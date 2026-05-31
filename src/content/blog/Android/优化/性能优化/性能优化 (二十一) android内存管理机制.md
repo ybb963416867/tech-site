@@ -1,3 +1,11 @@
+---
+title: "性能优化 (二十一) android内存管理机制"
+description: "性能优化 (二十一) android内存管理机制 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # android内存管理机制
 
 ## Java内存管理机制

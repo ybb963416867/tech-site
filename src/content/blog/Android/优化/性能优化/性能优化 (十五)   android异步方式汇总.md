@@ -1,3 +1,11 @@
+---
+title: "性能优化 (十五) android异步方式汇总"
+description: "性能优化 (十五) android异步方式汇总 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # android异步方式汇总
 
 ## Thread

@@ -1,3 +1,11 @@
+---
+title: "udp"
+description: "udp 的技术笔记。"
+pubDate: 2026-05-31
+category: "通讯"
+tags: [Array]
+draft: false
+---
 # udp
 
 ## udp 接受速率最大
@@ -27,7 +35,6 @@ class ControlUdpThread : Thread() {
         this.name = TAG
         priority = NORM_PRIORITY + 1
     }
-
 
     @Synchronized
     fun setPause(paused: Boolean) {
@@ -103,7 +110,6 @@ class ControlUdpThread : Thread() {
         }
     }
 
-
     @Synchronized
     fun cancel() {
         start = false
@@ -117,7 +123,6 @@ class ControlUdpThread : Thread() {
         private const val BUFFER_SIZE = 2 * 1024 * 1024
         private const val PORT_RECEIVE: Int = 40009
     }
-
 
 }
 ```

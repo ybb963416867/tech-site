@@ -1,3 +1,11 @@
+---
+title: "性能优化 (九) app的启动优化"
+description: "性能优化 (九) app的启动优化 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # App启动优化的介绍
 
 ## 背景介绍

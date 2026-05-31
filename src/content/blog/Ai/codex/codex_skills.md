@@ -1,3 +1,11 @@
+---
+title: "codex_skills"
+description: "用途：为当前对话创建一个新的分支工作树，便于并行尝试不同修改方案。"
+pubDate: 2026-05-31
+category: "codex"
+tags: [Notes]
+draft: false
+---
 # Codex 技能说明
 
 ## 派生

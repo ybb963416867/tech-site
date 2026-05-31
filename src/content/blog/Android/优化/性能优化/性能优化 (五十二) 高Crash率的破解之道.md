@@ -1,3 +1,11 @@
+---
+title: "性能优化 (五十二) 高Crash率的破解之道"
+description: "性能优化 (五十二) 高Crash率的破解之道 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # 高Crash率的破解之道
 
 ## Crash相关指标

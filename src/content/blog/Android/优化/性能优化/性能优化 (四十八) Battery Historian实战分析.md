@@ -1,3 +1,11 @@
+---
+title: "性能优化 (四十八) Battery Historian实战分析"
+description: "性能优化 (四十八) Battery Historian实战分析 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Git, Shell]
+draft: false
+---
 # Battery Historian实战分析
 
 ## 安装

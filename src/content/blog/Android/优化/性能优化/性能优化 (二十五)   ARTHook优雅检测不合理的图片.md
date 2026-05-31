@@ -1,3 +1,11 @@
+---
+title: "性能优化 (二十五) ARTHook优雅检测不合理的图片"
+description: "性能优化 (二十五) ARTHook优雅检测不合理的图片 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Git, API]
+draft: false
+---
 # ARTHook优雅检测不合理的图片
 
 ## Bitmap内存模型

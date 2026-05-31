@@ -1,3 +1,11 @@
+---
+title: "性能优化 (十四) android线程调度原理剖析"
+description: "性能优化 (十四) android线程调度原理剖析 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # android线程调度原理剖析
 
 ## 线程调度原理

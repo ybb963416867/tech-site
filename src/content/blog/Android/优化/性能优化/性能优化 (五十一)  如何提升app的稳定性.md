@@ -1,3 +1,11 @@
+---
+title: "性能优化 (五十一) 如何提升app的稳定性"
+description: "性能优化 (五十一) 如何提升app的稳定性 的技术笔记。"
+pubDate: 2026-05-31
+category: "性能优化"
+tags: [Notes]
+draft: false
+---
 # 如何提升app的稳定性
 
 ## 正确认识

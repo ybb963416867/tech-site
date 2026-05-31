@@ -1,3 +1,11 @@
+---
+title: "Android_LruCache"
+description: "LruCache（Least Recently Used Cache）是 Android 提供的一种内存缓存工具类，基于 LRU（最近最少使用）算法实现。当缓存容量达到上限时，会优先淘汰最久未被使用的条目，从而为新数据腾出空间。"
+pubDate: 2026-05-31
+category: "内存优化"
+tags: [Array, API]
+draft: false
+---
 # Android LruCache 详解
 
 ## 一、概述

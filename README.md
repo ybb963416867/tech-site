@@ -1,25 +1,101 @@
 # Notes
 
-一个极简技术风格的 Astro Markdown 博客模板，内置文章自动生成、TOC、深色模式、标签、RSS、Pagefind 搜索、Giscus 评论、SEO、sitemap、robots.txt、Cloudflare Pages 和 GitHub Actions 部署。
+一个极简技术风格的 Astro Markdown 技术博客，用来沉淀个人技术笔记、工程经验和知识目录。
+
+内置能力：
+
+- Markdown 自动生成文章
+- 自动补齐文章 frontmatter
+- 多级目录自动生成专栏
+- 文章目录 TOC
+- 深色模式
+- 标签分类
+- RSS
+- Pagefind 搜索
+- Giscus 评论
+- SEO
+- sitemap
+- robots.txt
+- Cloudflare Pages 部署
+- GitHub Actions 自动部署
+- 响应式设计
+- 手机端文件浏览器式专栏目录
 
 ## 在线地址
 
 https://yangxiandroid.ccwu.cc/
 
-## 本地开发
+## 依赖与环境
+
+本地环境：
+
+- Node.js 22，和 GitHub Actions 中的版本保持一致
+- npm，项目使用 `package-lock.json`
+
+运行依赖：
+
+- `astro`：静态站点框架
+- `@astrojs/rss`：生成 RSS
+- `@astrojs/sitemap`：生成 sitemap
+- `@pagefind/default-ui`：Pagefind 搜索 UI
+- `@lucide/astro`：图标组件
+
+开发与构建依赖：
+
+- `@astrojs/check`：Astro 类型检查
+- `typescript`：TypeScript 支持
+- `pagefind`：构建后生成全文搜索索引
+
+外部服务：
+
+- GitHub：代码仓库
+- GitHub Actions：自动构建与部署
+- Cloudflare Pages：静态站点托管
+- Giscus：文章评论，依赖 GitHub Discussions
+
+## 快速开始
+
+安装依赖：
 
 ```bash
 npm install
+```
+
+启动本地开发服务：
+
+```bash
 npm run dev
 ```
 
-## 写文章
+检查项目：
 
-在 `src/content/blog` 下新建 Markdown 文件。推荐按目录组织文章，目录会自动成为专栏：
+```bash
+npm run check
+```
+
+构建项目：
+
+```bash
+npm run build
+```
+
+本地预览构建结果：
+
+```bash
+npm run preview
+```
+
+## 项目怎么使用
+
+### 写文章
+
+在 `src/content/blog` 下新建 Markdown 文件。
+
+推荐按照目录组织文章，目录会自动成为专栏：
 
 ```text
 src/content/blog/Android/系统/HAL/hal体系结构与设计思想-1.md
-src/content/blog/Ios/swift/view/SwiftUI Border 完全指南 🚀.md
+src/content/blog/Ios/swift/view/SwiftUI Border 完全指南.md
 src/content/blog/ai/codex/codex_cli_guide.md
 ```
 
@@ -38,73 +114,275 @@ draft: false
 
 生产环境会隐藏 `draft: true` 的文章。
 
-也可以直接把没有 frontmatter 的普通 Markdown 放进 `src/content/blog`。运行下面命令会自动补齐标题、摘要、日期、标签并移除 `[TOC]`：
+### 自动处理普通 Markdown
+
+也可以直接把没有 frontmatter 的普通 Markdown 放进 `src/content/blog`。
+
+运行下面命令会自动补齐标题、摘要、日期、标签，并移除 `[TOC]`：
 
 ```bash
 npm run posts:normalize
 ```
 
-`npm run dev`、`npm run check` 和 `npm run build` 也会先自动执行这一步。
+下面这些命令会自动先执行文章规范化：
 
-## 专栏
+```bash
+npm run dev
+npm run check
+npm run build
+```
 
-专栏由 `src/content/blog` 下的目录自动生成，支持多级目录和中文路径：
+### 专栏目录
+
+专栏由 `src/content/blog` 下的目录自动生成，支持多级目录、中文目录和特殊目录名：
 
 ```text
 src/content/blog/Android/系统/HAL/
+src/content/blog/c++/
+src/content/blog/工作/
 ```
 
-会生成：
+会生成对应页面：
 
 ```text
 /categories/Android/
 /categories/Android/系统/
 /categories/Android/系统/HAL/
+/categories/c++/
+/categories/工作/
 ```
 
-`/categories/` 是知识库式浏览页：左侧是目录树，右侧是文章卡片网格。默认只展开顶层目录；进入某个栏目页时，会自动展开当前路径相关的父级目录。点击目录名前的小三角只展开或收起子目录和文章，点击目录名称则进入对应专栏页。
+`/categories/` 是知识库式浏览页：
 
-空目录也会显示为专栏。开发服务会监听 `src/content/blog` 下目录的新增和删除，并触发页面刷新。修改 `astro.config.mjs` 后需要重启开发服务。
+- 桌面端：左侧目录树，右侧文章列表
+- 手机端：文件浏览器式目录，顶部显示当前目录名
+- 子目录会显示为文件夹
+- 当前目录直属文章会显示为笔记卡片
+- 从手机端目录进入文章详情时，会显示返回目录的顶部栏
+- 从文章列表进入文章详情时，保持标准文章详情页样式
 
-没有放进目录的旧文章仍会使用 frontmatter 里的 `category` 作为兜底专栏。
+### 搜索
 
-手机端的 `/categories/` 会切换成文件浏览器式目录：顶部显示当前目录名，下方优先显示子目录，再显示当前目录直属笔记。从目录进入笔记详情时会显示返回键；从文章列表进入详情时仍保持标准文章页样式。
+首页和文章页提供轻量文章搜索。
 
-## 搜索
+匹配范围包括：
 
-首页搜索使用 Pagefind，构建后会索引带 `data-pagefind-body` 的文章详情页正文，适合全文搜索。
+- 文章标题
+- Markdown 一级标题
+- 摘要
+- 专栏路径
+- 标签
+- slug
 
-文章栏目 `/blog/` 使用轻量列表搜索，输入后即时过滤当前文章列表。匹配范围包括文章标题、摘要、专栏路径、标签和 slug；多个关键词按全部命中处理，例如 `OpenAI Codex CLI` 会匹配同时包含这几个词的文章。搜索后可点击“显示全部”清空关键词并恢复完整列表。
-
-## 提交通知
-
-每次提交代码后，需要整理本次新增功能说明和验证/浏览过的页面 URL，并通过邮件发送给：
+多个关键词会按全部命中处理，例如：
 
 ```text
-binbingyang948@gmail.com
+OpenAI Codex CLI
 ```
 
-## 构建
+会匹配同时包含这些关键词的文章。
+
+构建后 Pagefind 会为文章正文生成全文搜索索引，索引输出到：
+
+```text
+dist/pagefind
+```
+
+### 标签、RSS、评论
+
+标签页：
+
+```text
+/tags/
+```
+
+RSS：
+
+```text
+/rss.xml
+```
+
+评论使用 Giscus，需要在 `src/site.config.ts` 中配置 GitHub Discussions 信息：
+
+```ts
+giscus: {
+  repo: 'OWNER/REPO',
+  repoId: 'REPLACE_WITH_REPO_ID',
+  category: 'Announcements',
+  categoryId: 'REPLACE_WITH_CATEGORY_ID'
+}
+```
+
+## 编译与检查
+
+类型检查：
+
+```bash
+npm run check
+```
+
+生产构建：
 
 ```bash
 npm run build
 ```
 
-构建流程会执行 `astro build`，然后用 Pagefind 为 `dist` 生成搜索索引。
+构建流程会执行：
 
-## 需要替换的配置
+```bash
+npm run posts:normalize
+astro build
+pagefind --site dist
+```
 
-- `src/site.config.ts`：站点名称、描述、作者、站点 URL、Giscus 配置
-- `astro.config.mjs`：生产站点地址可通过 `SITE_URL` 环境变量注入
-- `.github/workflows/deploy.yml`：把 `my-tech-site` 改成你的 Cloudflare Pages 项目名
+构建产物目录：
 
-## GitHub Secrets
+```text
+dist
+```
 
-GitHub Actions 部署需要：
+Pagefind 搜索索引目录：
 
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
+```text
+dist/pagefind
+```
 
-可选 GitHub repository variable：
+本地预览构建产物：
 
-- `SITE_URL`
+```bash
+npm run preview
+```
+
+## 项目部署
+
+项目通过 GitHub Actions 自动部署到 Cloudflare Pages。
+
+当前部署地址：
+
+```text
+https://yangxiandroid.ccwu.cc/
+```
+
+### Cloudflare Pages 配置
+
+Cloudflare Pages 项目名需要和 GitHub Actions 中保持一致。
+
+当前 workflow 使用：
+
+```bash
+pages deploy dist --project-name=my-tech-site
+```
+
+对应项目名：
+
+```text
+my-tech-site
+```
+
+### GitHub Secrets
+
+GitHub 仓库需要配置下面两个 Secrets：
+
+```text
+CLOUDFLARE_API_TOKEN
+CLOUDFLARE_ACCOUNT_ID
+```
+
+### GitHub Repository Variables
+
+建议配置：
+
+```text
+SITE_URL=https://yangxiandroid.ccwu.cc/
+```
+
+`SITE_URL` 会影响：
+
+- canonical URL
+- sitemap
+- RSS
+- SEO 链接
+
+### 自动部署流程
+
+当代码 push 到 `main` 分支时，会自动执行：
+
+```text
+Checkout
+Setup Node 22
+npm ci
+npm run build
+Cloudflare Pages deploy dist
+```
+
+也可以在 GitHub Actions 页面手动触发 workflow：
+
+```text
+workflow_dispatch
+```
+
+## 需要修改的配置
+
+站点信息：
+
+```text
+src/site.config.ts
+```
+
+包括：
+
+- 站点名称
+- 描述
+- 作者
+- 站点 URL
+- Giscus 配置
+
+Astro 站点地址：
+
+```text
+astro.config.mjs
+```
+
+生产环境推荐通过环境变量注入：
+
+```text
+SITE_URL
+```
+
+GitHub Actions 部署配置：
+
+```text
+.github/workflows/deploy.yml
+```
+
+需要确认：
+
+- Node.js 版本
+- Cloudflare Pages 项目名
+- Secrets 名称
+- 构建命令
+
+## 提交通知
+
+每次提交代码后，需要整理：
+
+- 本次新增或修改的功能说明
+- 验证过的页面 URL
+- 构建和检查结果
+
+并发送邮件到：
+
+```text
+binbingyang948@gmail.com
+```
+
+## 常用命令
+
+```bash
+npm install
+npm run dev
+npm run posts:normalize
+npm run check
+npm run build
+npm run preview
+```

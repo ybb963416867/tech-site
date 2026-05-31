@@ -12,32 +12,6 @@ draft: false
 
 ------
 
-## 目录
-
-1. [标题](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#标题)
-2. [段落与换行](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#段落与换行)
-3. [强调](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#强调)
-4. [引用](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#引用)
-5. [列表](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#列表)
-6. [代码](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#代码)
-7. [分隔线](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#分隔线)
-8. [链接](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#链接)
-9. [图片](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#图片)
-10. [表格](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#表格)
-11. [任务列表](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#任务列表)
-12. [脚注](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#脚注)
-13. [删除线](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#删除线)
-14. [高亮](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#高亮)
-15. [HTML 嵌入](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#html-嵌入)
-16. [转义字符](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#转义字符)
-17. [数学公式](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#数学公式)
-18. [Emoji](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#emoji)
-19. [定义列表](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#定义列表)
-20. [折叠内容](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#折叠内容)
-21. [锚点与页内跳转](https://claude.ai/chat/cea49d4f-e1ef-407e-8ea5-ef65c80ec202#锚点与页内跳转)
-
-------
-
 ## 标题
 
 使用 `#` 号表示标题，共 6 级。

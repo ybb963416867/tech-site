@@ -2,7 +2,7 @@
 title: "Dart 性能优化之常量、identical 函数、常量构造函数详解"
 description: "Dart 性能优化之常量、identical 函数、常量构造函数详解 的技术笔记。"
 pubDate: 2026-05-31
-category: "Flutter"
+category: "Dart"
 tags: [Notes]
 draft: false
 ---

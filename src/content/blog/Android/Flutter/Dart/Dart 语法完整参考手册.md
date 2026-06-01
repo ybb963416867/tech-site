@@ -2,7 +2,7 @@
 title: "Dart 语法完整参考手册"
 description: "适用版本：Dart 3.x 本手册系统整理 Dart 语言的核心语法，每个知识点均配有详细说明、完整示例代码及运行输出结果，适合快速查阅与深入学习。"
 pubDate: 2026-05-31
-category: "Flutter"
+category: "Dart"
 tags: [Swift, API, JavaScript]
 draft: false
 ---

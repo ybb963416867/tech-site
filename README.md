@@ -373,7 +373,7 @@ GitHub Actions 部署配置：
 并发送邮件到：
 
 ```text
-binbingyang948@gmail.com
+xxx@xxx.com
 ```
 
 ## 常用命令

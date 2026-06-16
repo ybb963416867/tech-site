@@ -6,7 +6,7 @@ category: "Jetpack Compose"
 tags: [Array, API, JavaScript, SEO]
 draft: false
 ---
-# Android Jetpack Compose 自定义控件详解
+# Jetpack Compose 自定义控件详解
 
 ## 目录
 

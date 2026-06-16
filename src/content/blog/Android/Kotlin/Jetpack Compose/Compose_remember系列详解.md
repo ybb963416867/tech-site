@@ -6,7 +6,7 @@ category: "Jetpack Compose"
 tags: [Array, API]
 draft: false
 ---
-# Jetpack Compose remember 系列详解
+# Compose remember 系列详解
 
 ## 目录
 

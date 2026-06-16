@@ -6,7 +6,7 @@ category: "Jetpack Compose"
 tags: [API, SEO]
 draft: false
 ---
-# Android Jetpack Compose 事件分发与自定义手势
+# Jetpack Compose 事件分发与自定义手势
 
 ## 目录
 

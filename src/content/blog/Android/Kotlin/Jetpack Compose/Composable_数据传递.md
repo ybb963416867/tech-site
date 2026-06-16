@@ -6,7 +6,7 @@ category: "Jetpack Compose"
 tags: [API]
 draft: false
 ---
-# Android Jetpack Compose 数据传递详解
+# Jetpack Compose 数据传递详解
 
 ## 目录
 

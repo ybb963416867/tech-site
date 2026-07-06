@@ -443,37 +443,37 @@ import Flutter
 import UIKit
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
-  override func application(
-    _ application: UIApplication,
-    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    guard let controller = window?.rootViewController as? FlutterViewController else {
-      return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+    override func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-
-    let channel = FlutterMethodChannel(
-      name: "com.example.app/device",
-      binaryMessenger: controller.binaryMessenger
-    )
-
-    channel.setMethodCallHandler { call, result in
-      switch call.method {
-      case "getDeviceInfo":
-        result([
-          "platform": "ios",
-          "version": UIDevice.current.systemVersion,
-          "model": UIDevice.current.model
-        ])
-      default:
-        result(FlutterMethodNotImplemented)
-      }
+    
+    func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+        GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    
+        let channel = FlutterMethodChannel(
+            name: "com.example.app/device",
+            binaryMessenger: engineBridge.applicationRegistrar.messenger()
+        )
+        
+        channel.setMethodCallHandler { call, result in
+            switch call.method {
+            case "getDeviceInfo":
+                result([
+                    "platform": "ios",
+                    "version": UIDevice.current.systemVersion,
+                    "model": UIDevice.current.model
+                ])
+            default:
+                result(FlutterMethodNotImplemented)
+            }
+        }
     }
-
-    GeneratedPluginRegistrant.register(with: self)
-    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
-  }
 }
+
 ```
 
 插件化 Swift 结构：
